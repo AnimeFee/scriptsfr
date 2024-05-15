@@ -4,9 +4,9 @@ local Window = OrionLib:MakeWindow({
 Name = "Title of the library", 
 HidePremium = false, 
 SaveConfig = true, 
-ConfigFolder = "OrionTest"
-IntroEnabled = true 
-IntroText = "THIS SCRIPT IS FREE SO DONT BUY IT ANYWHERE"
+ConfigFolder = "OrionTest",
+IntroEnabled = true ,
+IntroText = "THIS SCRIPT IS FREE SO DONT BUY IT ANYWHERE",
 })
 
 local Tab = Window:MakeTab({
