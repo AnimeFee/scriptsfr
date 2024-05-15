@@ -42,6 +42,8 @@ Tab:AddSlider({
 	end    
 })
 
+Slider:Set(2)
+
 Tab:AddTextbox({
 	Name = "Textbox",
 	Default = "default box input",
