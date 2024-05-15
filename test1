@@ -15,30 +15,6 @@ local Tab = Window:MakeTab({
 	PremiumOnly = false
 })
 
-local Tab = Window:MakeTab({
-	Name = "Tab 2",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
-
-local Tab = Window:MakeTab({
-	Name = "Tab 3",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
-
-local Tab = Window:MakeTab({
-	Name = "Tab 4",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
-
-local Tab = Window:MakeTab({
-	Name = "Tab 5",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
-
 OrionLib:MakeNotification({
 	Name = "IdkyetHub",
 	Content = "Test test alpha kido",
@@ -52,32 +28,6 @@ Tab:AddButton({
       		print("button pressed")
   	end    
 })
-
-Tab:AddButton({
-	Name = "Button!",
-	Callback = function()
-      		print("button pressed")
-  	end    
-})
-
-Tab:AddButton({
-	Name = "Button!",
-	Callback = function()
-      		print("button pressed")
-  	end    
-})
-
-Tab:AddButton({
-	Name = "Button!",
-	Callback = function()
-      		print("button pressed")
-  	end    
-})
-
---[[
-Name = <string> - The name of the button.
-Callback = <function> - The function of the button.
-]]
 
 Tab:AddSlider({
 	Name = "Slider",
