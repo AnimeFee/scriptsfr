@@ -489,28 +489,42 @@ local AutoDungeonToggle =
 PlayerTab:AddButton({
     Name = "Claim All Codes",
     Callback = function()
-        local codeIndices = table.pack({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29})
-        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GiftCodeReceived"):InvokeServer(unpack(codeIndices))
+        local codeTable = {}
+        for i = 1, 29 do
+            table.insert(codeTable, i)
+        end
+
+        local remote = game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GiftCodeReceived")
+        local success, errorMessage = pcall(remote.InvokeServer, remote, unpack(codeTable))
+        if not success then
+            print("Error claiming codes:", errorMessage)
+        end
     end
 })
 
-    PlayerTab:AddButton({
-        Name = "Daily Rewards",
-        Callback = function()
-            while wait() do
- for x = 1, 7 do
-        local args = {
-            [1] = x
-        }
-        game:GetService("ReplicatedStorage").Remotes.ClaimSevenLoginReward:FireServer(unpack(args))
-    end 
+PlayerTab:AddButton({
+    Name = "Daily Rewards",
+    Callback = function()
+        for day = 1, 7 do
+            local remote = game:GetService("ReplicatedStorage").Remotes.ClaimSevenLoginReward
+            local success, errorMessage = pcall(remote.FireServer, remote, day)
+            if not success then
+                print("Error claiming daily reward for day", day, ":", errorMessage)
+            end
+            wait(1) -- add a delay between iterations, adjust as needed
         end
-    })
+    end
+})
 
- PlayerTab:AddButton({
-        Name = "Claim Group Rewards",
-        Callback = function()
-            while wait() do
-game:GetService("ReplicatedStorage").Remotes.ClaimGroupReward:InvokeServer()
+PlayerTab:AddButton({
+    Name = "Claim Group Rewards",
+    Callback = function()
+        local remote = game:GetService("ReplicatedStorage").Remotes.ClaimGroupReward
+        local success, errorMessage = pcall(remote.InvokeServer, remote)
+        if not success then
+            print("Error claiming group reward:", errorMessage)
+        else
+            wait(1) -- add a delay between iterations, adjust as needed
         end
-    }) 
+    end
+})
