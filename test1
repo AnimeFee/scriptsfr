@@ -51,15 +51,4 @@ Tab:AddTextbox({
 	end	  
 })
 
-Tab:AddDropdown({
-	Name = "Dropdown",
-	Default = "1",
-	Options = {"1", "2"},
-	Callback = function(Value)
-		print(Value)
-	end    
-})
-
-Dropdown:Refresh(List<table>,true)
-Dropdown:Set("dropdown option")
 OrionLib:Init()
