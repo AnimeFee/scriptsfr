@@ -128,6 +128,45 @@ PlayerTab:AddButton(
 })
   
 PlayerTab:AddButton({
+Name = "Group Rewards",
+Callback = function()
+while wait() do
+game:GetService("ReplicatedStorage").Remotes.ClaimGroupReward:InvokeServer()
+end
+end
+})
+ 
+PlayerTab:AddButton({
+Name = "Daily Gifts",
+Callback = function()
+while wait() do
+for x = 1, 7 do
+local args = {
+[1] = x
+}
+game:GetService("ReplicatedStorage").Remotes.ClaimSevenLoginReward:FireServer(unpack(args))
+end
+end
+end
+})
+ 
+ 
+PlayerTab:AddButton({
+Name = "Redeem Codes",
+Callback = function()
+while wait() do
+for x = 1, 1000 do
+local args = {
+    [1] = x
+}
+ 
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GiftCodeReceived"):InvokeServer(unpack(args))
+end
+end
+end
+})
+
+PlayerTab:AddButton({
         Name = "Dupe",
         Callback = function()
 game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("DeleteMultipleHero"):Destroy()
