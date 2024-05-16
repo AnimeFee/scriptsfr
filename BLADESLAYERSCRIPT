@@ -256,7 +256,7 @@ local function AutoDungeon()
 local startTime = os.time()  -- Get the starting time
 local duration = 15 * 60  -- 15 minutes in seconds
 local currentPlaceId = game.PlaceId
-local waitTime = math.ceil(os.time() / (30 * 60)) * (30 * 60) - 15 - os.time()
+local waitTime = math.ceil(os.time() / (30 * 60)) * (30 * 60) - 30 - os.time()
 wait(waitTime)
 local loopStartTime = os.time()
 while os.time() - loopStartTime < duration do
