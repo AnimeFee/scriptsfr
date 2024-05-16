@@ -1,0 +1,201 @@
+    -- Loading the OrionLib library
+    local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Orion/main/source'))()
+    if not OrionLib then
+        error("Failed to load the OrionLib library")
+        return
+    end
+
+    -- Creating the main window
+    local Window = OrionLib:MakeWindow({
+        Name = "Gyat Simulator",
+        HidePremium = false,
+        SaveConfig = true,
+        ConfigFolder = "WendelCfg",
+        IntroEnabled = false
+    })
+
+    -- Table to store global variables
+    local G = {
+    Click = false,
+    Rebirth = false,
+    SpinWheel = false,
+    EGG1 = false,
+    EGG2 = false,
+    EGG3 = false,
+    EGG4 = false,
+    EGG5 = false,
+}
+
+    -- Creating the Player tab
+    local PlayerTab = Window:MakeTab({
+        Name = "Scripts",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+ 
+   local EggsTab = Window:MakeTab({
+        Name = "Eggs",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+
+   PlayerTab:AddToggle({
+        Name = "Auto Click",
+        Default = false,
+        Callback = function(Value)
+            G.Click = Value
+            if Value then
+                while G.Click do
+local args = {
+    [1] = "Weight"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("Tool"):WaitForChild("[C-S]TryEquipTool"):FireServer(unpack(args))
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("Game"):WaitForChild("[C-S]TryClick"):FireServer()
+                    wait(1) -- Adjust the delay as needed
+                end
+            end
+        end,
+    })
+
+
+   PlayerTab:AddToggle({
+        Name = "Auto Rebirth",
+        Default = false,
+        Callback = function(Value)
+            G.Rebirth = Value
+            if Value then
+                while G.Rebirth do
+game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("Eco"):WaitForChild("[C-S]PlayerTryRebirth"):FireServer()
+                    wait(1) -- Adjust the delay as needed
+                end
+            end
+        end,
+    })
+
+
+   PlayerTab:AddToggle({
+        Name = "Auto Spin Wheel",
+        Default = false,
+        Callback = function(Value)
+            G.SpinWheel = Value
+            if Value then
+                while G.SpinWheel do
+game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Spin"):WaitForChild("[C-S]TrySpin"):InvokeServer()
+                    wait(1) -- Adjust the delay as needed
+                end
+            end
+        end,
+    })
+
+   EggsTab:AddToggle({
+        Name = "Auto Buy Egg(50 diamond)",
+        Default = false,
+        Callback = function(Value)
+            G.EGG1 = Value
+            if Value then
+                while G.EGG1 do
+local args = {
+    [1] = "Egg1",
+    [2] = 1
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Luck"):WaitForChild("[C-S]DoLuck"):InvokeServer(unpack(args))
+
+
+                    wait(1) -- Adjust the delay as needed
+                end
+            end
+        end,
+    })
+
+
+EggsTab:AddToggle({
+        Name = "Auto Buy Egg(1000 diamond)",
+        Default = false,
+        Callback = function(Value)
+            G.EGG2 = Value
+            if Value then
+                while G.EGG2 do
+local args = {
+    [1] = "Egg2",
+    [2] = 1
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Luck"):WaitForChild("[C-S]DoLuck"):InvokeServer(unpack(args))
+
+
+                    wait(1) -- Adjust the delay as needed
+                end
+            end
+        end,
+    })
+
+
+EggsTab:AddToggle({
+        Name = "Auto Buy Egg(10k diamond)",
+        Default = false,
+        Callback = function(Value)
+            G.EGG3 = Value
+            if Value then
+                while G.EGG3 do
+local args = {
+    [1] = "Egg3",
+    [2] = 1
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Luck"):WaitForChild("[C-S]DoLuck"):InvokeServer(unpack(args))
+
+
+                    wait(1) -- Adjust the delay as needed
+                end
+            end
+        end,
+    })
+
+
+EggsTab:AddToggle({
+        Name = "Auto Buy Egg(100k diamond)",
+        Default = false,
+        Callback = function(Value)
+            G.EGG4 = Value
+            if Value then
+                while G.EGG4 do
+local args = {
+    [1] = "Egg4",
+    [2] = 1
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Luck"):WaitForChild("[C-S]DoLuck"):InvokeServer(unpack(args))
+
+
+                    wait(1) -- Adjust the delay as needed
+                end
+            end
+        end,
+    })
+
+
+EggsTab:AddToggle({
+        Name = "Auto Buy Egg(1M diamond)",
+        Default = false,
+        Callback = function(Value)
+            G.EGG5 = Value
+            if Value then
+                while G.EGG5 do
+local args = {
+    [1] = "Egg5",
+    [2] = 1
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Luck"):WaitForChild("[C-S]DoLuck"):InvokeServer(unpack(args))
+
+
+                    wait(1) -- Adjust the delay as needed
+                end
+            end
+        end,
+    })
+
+
