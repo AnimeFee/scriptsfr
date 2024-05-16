@@ -246,37 +246,39 @@ AutoRaidTab:AddButton({
     })
 
 local function TeleportToAndFromDungeon(dungeonMapId, returnMapId, returnTime)
-    -- Teleport the player to the specified dungeon
-    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(
-        {
-            ["mapId"] = dungeonMapId
-        }
-    )
-    wait(returnTime)
-    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(
-        {
-            ["mapId"] = returnMapId
-        }
-    )
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(
+{["mapId"] = dungeonMapId})
+wait(returnTime)
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(
+{["mapId"] = returnMapId})
 end
-local AutoDungeonToggle =
-    AutoDungeonTab:AddToggle(
-    {
-        Name = "Auto-Dungeon(FINALLY FIXED!!!)",
-        Default = false,
-        Callback = function(Value)
-            if Value then
-                while true do
-                    local currentTime = os.time()
-                    local nextTeleportTime = math.ceil(currentTime / (30 * 60)) * (30 * 60) - 15
-                    local waitTime = nextTeleportTime - currentTime
-                    wait(waitTime)
-                    TeleportToAndFromDungeon(50016, 50001, 15 * 60)
-                end
-            end
-        end
-    }
-)
+local function AutoDungeon()
+local startTime = os.time()  -- Get the starting time
+local duration = 15 * 60  -- 15 minutes in seconds
+local currentPlaceId = game.PlaceId
+local waitTime = math.ceil(os.time() / (30 * 60)) * (30 * 60) - 15 - os.time()
+wait(waitTime)
+local loopStartTime = os.time()
+while os.time() - loopStartTime < duration do
+return
+end
+
+TeleportToAndFromDungeon(50016, 50001, 15 * 60)
+wait(15 * 60)
+end
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(
+{["mapId"] = currentPlaceId})
+end
+
+local AutoDungeonToggle = AutoDungeonTab:AddToggle({
+Name = "Auto-Dungeon(FINALLY FIXED!!!)",
+Default = false,
+Callback = function(Value)
+if Value then
+AutoDungeon()
+end
+end})
            
 		spawn(function()
                 while wait(1) do
