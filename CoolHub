@@ -1,6 +1,21 @@
-if game.PlaceId == 14195873109 then
-loadstring(game:HttpGet("https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Slayer%20corps",true))()
+local placeId = game.PlaceId
 
-else if game.PlaceId == 15744137588 then
-loadstring(game:HttpGet('https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/BLADESLAYERSCRIPT'))()
+local scriptUrls = {
+    [14195873109] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Slayer%20corps",
+    [15744137588] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/BLADESLAYERSCRIPT"
+}
+
+local function loadScript(url)
+    local success, result = pcall(function()
+        loadstring(game:HttpGet(url, true))()
+    end)
+    if not success then
+        print("Error loading script:", result)
+    end
+end
+
+if scriptUrls[placeId] then
+    loadScript(scriptUrls[placeId])
+else
+    print("Unknown place ID:", placeId)
 end
