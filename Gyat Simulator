@@ -89,6 +89,23 @@ game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Functi
         end,
     })
 
+PlayerTab:AddButton({
+Name = "Daily Gifts",
+Callback = function()
+while wait() do
+for x = 1, 1000 do
+local args = {
+    [1] = x
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("DailySign"):WaitForChild("[C-S]PlayerTrySign"):FireServer(unpack(args))
+game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("DailySign"):WaitForChild("isCanSign"):InvokeServer()
+end
+end
+end
+})
+
+
    EggsTab:AddToggle({
         Name = "Auto Buy Egg(50 diamond)",
         Default = false,
