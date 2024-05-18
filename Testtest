@@ -1,0 +1,47 @@
+    local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Orion/main/source'))()
+    if not OrionLib then
+        error("Failed to load the OrionLib library")
+        return
+    end
+
+    local Window = OrionLib:MakeWindow({
+        Name = "Trade+Dupe Script",
+        HidePremium = false,
+        SaveConfig = true,
+        ConfigFolder = "WendelCfg",
+        IntroEnabled = false
+    })
+
+    -- Table to store global variables
+    local G = {}
+
+    local PlayerTab = Window:MakeTab({
+        Name = "Player",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+
+local SkibidiTab = Window:MakeTab({
+        Name = "Exchange w/ Eggs",
+        Icon = "rbxassetid://4483345998", PremiumOnly = false
+    })
+
+for level = 1, 46 do
+    local gemId = 100 + level
+    FuseGem1Tab:AddButton({
+        Name = "Fuse Gem to level 10 w/ Lv." .. level,
+        Callback = function()
+            local args = {
+                [1] = gemId
+            }
+
+            local success, error_message = pcall(function()
+                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("ExchangeItem"):FireServer(unpack(args))
+            end)
+
+            if not success then
+                warn("Failed to fuse gem: ", error_message)
+            end
+        end
+    })
+end
