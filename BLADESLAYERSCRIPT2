@@ -37,6 +37,33 @@ getgenv().Settings = {
             wait(0.01)
         end
     end
+
+autoGainPower = false
+autoGainPowerLoop = nil
+fireDelay = 0.1 
+ScriptsTab:AddToggle({
+    Name = "AutoGainPower",
+    Default = false,
+    Callback = function(Value)
+        autoGainPower = Value
+        print("Auto Gain Pwr is " .. tostring(autoGainPower))
+        if autoGainPower then
+            autoGainPowerLoop = game:GetService("RunService").Heartbeat:Connect(function()
+                local remotes = game:GetService("ReplicatedStorage"):FindFirstChild("Remotes")
+                if remotes and remotes:FindFirstChild("PlayerClickAttack") then
+                    remotes.PlayerClickAttack:FireServer()
+                end
+                wait(fireDelay)
+            end)
+        else
+            if autoGainPowerLoop then
+                autoGainPowerLoop:Disconnect()
+                autoGainPowerLoop = nil
+            end
+        end
+    end
+})
+
     local PlayerTab = Window:MakeTab({
         Name = "Player",
         Icon = "rbxassetid://4483345998",
@@ -52,6 +79,7 @@ local AutoBuyTab = Window:MakeTab({
         Icon = "rbxassetid://4483345998",
         PremiumOnly = false
     })
+
 ScriptsTab:AddToggle({
     Name = "Kill Aura/Auto Collect",
     Callback = function(state)
@@ -126,45 +154,8 @@ PlayerTab:AddButton(
             getgenv().Settings.selectedPlayer = nil
         end
 })
-  
-PlayerTab:AddButton({
-Name = "Group Rewards",
-Callback = function()
-while wait() do
-game:GetService("ReplicatedStorage").Remotes.ClaimGroupReward:InvokeServer()
-end
-end
-})
- 
-PlayerTab:AddButton({
-Name = "Daily Gifts",
-Callback = function()
-while wait() do
-for x = 1, 7 do
-local args = {
-[1] = x
-}
-game:GetService("ReplicatedStorage").Remotes.ClaimSevenLoginReward:FireServer(unpack(args))
-end
-end
-end
-})
- 
- 
-PlayerTab:AddButton({
-Name = "Redeem Codes",
-Callback = function()
-while wait() do
-for x = 1, 1000 do
-local args = {
-    [1] = x
-}
- 
-game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GiftCodeReceived"):InvokeServer(unpack(args))
-end
-end
-end
-})
+
+
 
 PlayerTab:AddButton({
         Name = "Dupe",
@@ -172,31 +163,7 @@ PlayerTab:AddButton({
 game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("DeleteMultipleHero"):Destroy()
     end
 })
-autoGainPower = false
-autoGainPowerLoop = nil
-fireDelay = 0.1 
-ScriptsTab:AddToggle({
-    Name = "AutoGainPower",
-    Default = false,
-    Callback = function(Value)
-        autoGainPower = Value
-        print("Auto Gain Pwr is " .. tostring(autoGainPower))
-        if autoGainPower then
-            autoGainPowerLoop = game:GetService("RunService").Heartbeat:Connect(function()
-                local remotes = game:GetService("ReplicatedStorage"):FindFirstChild("Remotes")
-                if remotes and remotes:FindFirstChild("PlayerClickAttack") then
-                    remotes.PlayerClickAttack:FireServer()
-                end
-                wait(fireDelay)
-            end)
-        else
-            if autoGainPowerLoop then
-                autoGainPowerLoop:Disconnect()
-                autoGainPowerLoop = nil
-            end
-        end
-    end
-})
+
     ScriptsTab:AddButton({
         Name = "SimpleSpy",
         Callback = function()
@@ -496,3 +463,62 @@ local AutoDungeonToggle =
                     end
 		end
             end)
+
+local MiscTab = Window:MakeTab({
+        Name = "Misc",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+
+MiscTab:AddButton({
+Name = "Group Rewards",
+Callback = function()
+while wait() do
+game:GetService("ReplicatedStorage").Remotes.ClaimGroupReward:InvokeServer()
+end
+end
+})
+ 
+MiscTab:AddButton({
+Name = "Daily Gifts",
+Callback = function()
+while wait() do
+for x = 1, 7 do
+local args = {
+[1] = x
+}
+game:GetService("ReplicatedStorage").Remotes.ClaimSevenLoginReward:FireServer(unpack(args))
+end
+end
+end
+})
+ 
+ 
+MiscTab:AddButton({
+Name = "Redeem Codes",
+Callback = function()
+while wait() do
+for x = 1, 1000 do
+local args = {
+    [1] = x
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GiftCodeReceived"):InvokeServer(unpack(args))
+end
+end
+end
+})
+
+
+MiscTab:AddButton({
+Name = "Redeem Spins",
+Callback = function()
+while wait() do
+for x = 1, 10 do
+local args = {
+    [1] = x
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("ClaimActivitySpinTicket"):InvokeServer(unpack(args))
+end
+end
+end
+})
