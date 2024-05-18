@@ -28,7 +28,7 @@ local SkibidiTab = Window:MakeTab({
 
 for level = 1, 46 do
     local gemId = 100 + level
-    FuseGem1Tab:AddButton({
+    SkibidiTab:AddButton({
         Name = "Fuse Gem to level 10 w/ Lv." .. level,
         Callback = function()
             local args = {
