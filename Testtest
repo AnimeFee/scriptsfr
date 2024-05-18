@@ -21,27 +21,61 @@
         PremiumOnly = false
     })
 
-local SkibidiTab = Window:MakeTab({
-        Name = "Exchange w/ Eggs",
-        Icon = "rbxassetid://4483345998", PremiumOnly = false
+local MiscTab = Window:MakeTab({
+        Name = "Misc",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
     })
 
-for level = 1, 46 do
-    local gemId = 100 + level
-    SkibidiTab:AddButton({
-        Name = "Fuse Gem to level 10 w/ Lv." .. level,
-        Callback = function()
-            local args = {
-                [1] = gemId
-            }
-
-            local success, error_message = pcall(function()
-                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("ExchangeItem"):FireServer(unpack(args))
-            end)
-
-            if not success then
-                warn("Failed to fuse gem: ", error_message)
-            end
-        end
-    })
+MiscTab:AddButton({
+Name = "Group Rewards",
+Callback = function()
+while wait() do
+game:GetService("ReplicatedStorage").Remotes.ClaimGroupReward:InvokeServer()
 end
+end
+})
+ 
+MiscTab:AddButton({
+Name = "Daily Gifts",
+Callback = function()
+while wait() do
+for x = 1, 7 do
+local args = {
+[1] = x
+}
+game:GetService("ReplicatedStorage").Remotes.ClaimSevenLoginReward:FireServer(unpack(args))
+end
+end
+end
+})
+ 
+ 
+MiscTab:AddButton({
+Name = "Redeem Codes",
+Callback = function()
+while wait() do
+for x = 1, 1000 do
+local args = {
+    [1] = x
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GiftCodeReceived"):InvokeServer(unpack(args))
+end
+end
+end
+})
+
+
+MiscTab:AddButton({
+Name = "Redeem Spins",
+Callback = function()
+while wait() do
+for x = 1, 10 do
+local args = {
+    [1] = x
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("ClaimActivitySpinTicket"):InvokeServer(unpack(args))
+end
+end
+end
+})
