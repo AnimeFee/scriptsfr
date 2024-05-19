@@ -1,1 +1,245 @@
 
+local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Orion/main/source'))()
+if not OrionLib then
+error("Failed to load the OrionLib library")
+return
+end
+
+    local Window = OrionLib:MakeWindow({
+        Name = "Cool Hub",
+        HidePremium = false,
+        SaveConfig = true,
+        ConfigFolder = "WendelCfg",
+        IntroEnabled = false
+    })
+
+    -- Table to store global variables
+    local G = {
+    EGG1 = false,
+    EGG2 = false,
+    EGG3 = false,
+    EGG4 = false,
+    EGG5 = false,
+    EGG6 = false,
+    Upgrade = false,
+    Click = false,
+
+
+
+}
+
+    local v1 = Window:MakeTab({
+        Name = "Scripts",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+ 
+   local v2 = Window:MakeTab({
+        Name = "Eggs",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    }) 
+   local v4 = Window:MakeTab({
+        Name = "Teleport(Doesnt Work If You Dont Own The World)",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+
+v1:AddButton({
+Name = "Group Reward",
+Callback = function()
+local args = {
+    [1] = true
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("Reward"):WaitForChild("GroupReward"):FireServer(unpack(args))
+end
+})
+
+v1:AddButton({
+    Name = "Redeem Codes",
+    Callback = function()
+        local rewardCodes = {"like200k", "like15k", "3000like", "welcome", "1000like"}
+        while wait() do
+            for _, code in ipairs(rewardCodes) do
+                local args = {
+                    [1] = code
+                }
+
+                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("Reward"):WaitForChild("CodeReward"):FireServer(unpack(args))
+            end
+        end
+    end
+})
+
+v2:AddToggle({
+Name = "Auto Buy Egg(10 Wins)",
+Default = false,
+Callback = function(Value)
+G.EGG1 = Value
+if Value then
+while G.EGG1 do
+local args = {
+    [1] = 1,
+    [2] = "1",
+    [3] = {}
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("Hatch"):WaitForChild("EggHatch"):InvokeServer(unpack(args))
+end
+end
+end,})
+
+v2:AddToggle({
+Name = "Auto Buy Egg(40 Wins",
+Default = false,
+Callback = function(Value)
+G.EGG2 = Value
+if Value then
+while G.EGG2 do
+local args = {
+    [1] = 2,
+    [2] = "2",
+    [3] = {}
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("Hatch"):WaitForChild("EggHatch"):InvokeServer(unpack(args))
+end
+end
+end,})
+
+v2:AddToggle({
+Name = "Auto Buy Egg(250 Wins)",
+Default = false,
+Callback = function(Value)
+G.EGG3 = Value
+if Value then
+while G.EGG3 do
+local args = {
+    [1] = 3,
+    [2] = "3",
+    [3] = {}
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("Hatch"):WaitForChild("EggHatch"):InvokeServer(unpack(args))
+end
+end
+end,})
+
+v2:AddToggle({
+Name = "Auto Buy Egg(500 Wins)",
+Default = false,
+Callback = function(Value)
+G.EGG4 = Value
+if Value then
+while G.EGG4 do
+local args = {
+    [1] = 4,
+    [2] = "4",
+    [3] = {}
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("Hatch"):WaitForChild("EggHatch"):InvokeServer(unpack(args))
+end
+end
+end,})
+
+v2:AddToggle({
+Name = "Auto Buy Egg(2k Wins)",
+Default = false,
+Callback = function(Value)
+G.EGG5 = Value
+if Value then
+while G.EGG5 do
+local args = {
+    [1] = 5,
+    [2] = "5",
+    [3] = {}
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("Hatch"):WaitForChild("EggHatch"):InvokeServer(unpack(args))
+end
+end
+end,})
+
+v2:AddToggle({
+Name = "Auto Buy Egg(6.5k Wins)",
+Default = false,
+Callback = function(Value)
+G.EGG6 = Value
+if Value then
+while G.EGG6 do
+local args = {
+    [1] = 6,
+    [2] = "6",
+    [3] = {}
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("Hatch"):WaitForChild("EggHatch"):InvokeServer(unpack(args))
+end
+end
+end,})
+
+v1:AddButton({
+Name = "Auto Redeem Gifts",
+Callback = function()
+for x = 1, 10 do
+local args = {
+    [1] = x
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("Online"):WaitForChild("TryGetOnlineGift"):InvokeServer(unpack(args))
+end
+end
+})
+
+v1:AddButton({
+Name = "Redeem Daily Reward",
+Callback = function()
+for x = 1, 10 do
+local args = {
+    [1] = x
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("Reward"):WaitForChild("DailyReward"):InvokeServer(unpack(args))
+end
+end
+})
+
+v1:AddToggle({
+Name = "Auto Upgrade Weapon",
+Default = false,
+Callback = function(Value)
+G.Upgrade = Value
+if Value then
+while G.Upgrade do
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Weapon"):WaitForChild("Upgrade"):FireServer()
+wait() 
+end
+end
+end,
+})
+
+v1:AddToggle({
+Name = "Auto Click",
+Default = false,
+Callback = function(Value)
+G.Click = Value
+if Value then
+while G.Click do
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Weapon"):WaitForChild("TakeDamage"):FireServer()
+wait()
+end
+end
+end,
+})
+
+
+local worlds = {1, 2, 3, 4, 5, 6}
+for _, world in ipairs(worlds) do
+    v4:AddButton({
+        Name = world,
+        Callback = function()
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Common"):WaitForChild("Door"):WaitForChild("Teleport"):FireServer(world)
+        end
+    })
+end
