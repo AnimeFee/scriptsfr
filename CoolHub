@@ -5,6 +5,7 @@ local scriptUrls = {
     [15744137588] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/BLADESLAYERSCRIPT",
     [17348055576] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Gyat%20Simulator",
     [17489613630] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Slayer%20corps",
+    [16436007861] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Warrior%20Simulator(beta)",
 }
 
 local function loadScript(url)
