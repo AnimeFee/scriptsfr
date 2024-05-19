@@ -3,7 +3,8 @@ local placeId = game.PlaceId
 local scriptUrls = {
     [14195873109] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Slayer%20corps",
     [15744137588] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/BLADESLAYERSCRIPT",
-    [17348055576] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Gyat%20Simulator"
+    [17348055576] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Gyat%20Simulator",
+    [17489613630] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Slayer%20corps",
 }
 
 local function loadScript(url)
