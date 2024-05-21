@@ -1,4 +1,6 @@
-local blacklistedUsers = {  }
+local blacklistedUsers = { 
+"example"
+}
 
 -- Function to check if a user is blacklisted
 local function isBlacklisted(username)
