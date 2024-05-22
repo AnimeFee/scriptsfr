@@ -25,9 +25,9 @@
     })
 
 local mapnames = {
-    [50103]="Book 1",
-    [50104]="Book 2",
-    [50105]="Book 3"
+    [50103]="Congress Hall",
+    [50104]="Border Territory",
+    [50105]="Polar Plain"
 }
 local mapdiff = {
     [1]="Easy",
@@ -69,6 +69,9 @@ RaidTab:AddToggle({
         if AutoRaid then
             local selectedmap = getgenv().Settings.selectedmap
             local selecteddiff = getgenv().Settings.selecteddiff
+
+            print("Selected Map: ", selectedmap)
+            print("Selected Difficulty: ", selecteddiff)
 
             local args = {
                 [1] = "Room3"
