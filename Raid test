@@ -113,9 +113,15 @@ RaidTab:AddToggle({
                 }
                 game:GetService("ReplicatedStorage").Remotes.QuitRaidsMap:InvokeServer(unpack(args))
                 getgenv().Settings.AutoRaid = false
-                game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
                 wait(5)
             end
         end
+    end
+})
+
+RaidTab:AddButton({
+    Name = "Rejoin Button",
+    Callback = function()
+        game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
     end
 })
