@@ -1,28 +1,29 @@
-    local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Orion/main/source'))()
-    if not OrionLib then
-        error("Failed to load the OrionLib library")
-        return
-    end
+local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
+if not OrionLib then
+    error("Failed to load the OrionLib library")
+    return
+end
 
-    local Window = OrionLib:MakeWindow({
-        Name = "Trade+Dupe Script",
-        HidePremium = false,
-        SaveConfig = true,
-        ConfigFolder = "WendelCfg",
-        IntroEnabled = false
-    })
+local Window = OrionLib:MakeWindow({
+    Name = "Trade+Dupe Script",
+    HidePremium = false,
+    SaveConfig = true,
+    ConfigFolder = "WendelCfg",
+    IntroEnabled = false
+})
 
-    -- Table to store global variables
-    getgenv().Settings = {
-
-    AutoRaid = false
+-- Table to store global variables
+getgenv().Settings = {
+    AutoRaid = false,
+    selectedmap = 50103, -- Add default map here
+    selecteddiff = 1 -- Add default difficulty here
 }
 
-    local RaidTab = Window:MakeTab({
-        Name = "AutoRaid",
-        Icon = "rbxassetid://4483345998",
-        PremiumOnly = false
-    })
+local RaidTab = Window:MakeTab({
+    Name = "AutoRaid",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
 
 local mapnames = {
     [50103]="Congress Hall",
@@ -49,6 +50,7 @@ end
 RaidTab:AddDropdown({
     Name="Select Raid Map",
     Options=worldnames,
+    Default=getgenv().Settings.selectedmap, -- Add this line
     Callback=function(selectedmap)
         getgenv().Settings.selectedmap = selectedmap
     end
@@ -57,6 +59,7 @@ RaidTab:AddDropdown({
 RaidTab:AddDropdown({
     Name="Select Raid Difficulty",
     Options=diff,
+    Default=getgenv().Settings.selecteddiff, -- Add this line
     Callback=function(selecteddiff)
         getgenv().Settings.selecteddiff = selecteddiff
     end
@@ -73,6 +76,7 @@ RaidTab:AddToggle({
             print("Selected Map: ", selectedmap)
             print("Selected Difficulty: ", selecteddiff)
 
+            wait(10) -- Wait for 10 seconds
 
             local args = {
                 [1] = "Room3"
@@ -112,10 +116,7 @@ RaidTab:AddToggle({
                         ["toMapId"] = 50201
                     }
                 }
-                game:GetService("ReplicatedStorage").Remotes.QuitRaidsMap:InvokeServer(unpack(args))
-                getgenv().Settings.AutoRaid = false
-                game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
-                wait(5)
+                game:GetService("ReplicatedStorage").Remotes.QuitRaidRoom:InvokeServer(unpack(args))
             end
         end
     end
