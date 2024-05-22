@@ -67,12 +67,6 @@ local toggle = RaidTab:AddToggle({
     Callback = function(state)
         getgenv().Settings.AutoRaid = state
         if state then
-            local selectedmap = getgenv().Settings.selectedmap;
-            local selecteddiff = getgenv().Settings.selecteddiff;
-
-            print("Selected Map: ", selectedmap);
-            print("Selected Difficulty:", selecteddiff);
-
             local args = {
                 [1] = "Room3"
             }
