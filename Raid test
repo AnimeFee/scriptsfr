@@ -67,11 +67,11 @@ RaidTab:AddToggle({
     Default = false,
     Callback = function(AutoRaid)
         if AutoRaid then
-            local selectedmap = getgenv().Settings.selectedmap
-            local selecteddiff = getgenv().Settings.selecteddiff
+            local selectedmap = getgenv().Settings.selectedmap;
+            local selecteddiff = getgenv().Settings.selecteddiff;
 
-            print("Selected Map: ", selectedmap)
-            print("Selected Difficulty: ", selecteddiff)
+            print("Selected Map: ", selectedmap);
+            print("Selected Difficulty: ", selecteddiff);
 
             local args = {
                 [1] = "Room3"
