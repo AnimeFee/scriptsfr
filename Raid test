@@ -22,29 +22,43 @@ end});
 RaidTab:AddDropdown({Name="Select Raid Difficulty",Options=diff,Callback=function(selecteddiff)
 	getgenv().Settings.selecteddiff = selecteddiff;
 end});
+
+-- Create a function that is called when the toggle is turned on
+function onToggleTurnedOn()
+  -- Get the selected values from the dropdowns
+  local selectedMap = getgenv().Settings.selectedmap
+  local selectedDifficulty = getgenv().Settings.selecteddiff
+  
+  -- Print the selected values for debugging
+  print("Selected Map: ", selectedMap)
+  print("Selected Difficulty: ", selectedDifficulty)
+  
+  -- Use the selected values to perform the desired action
+  -- (Replace this with your own code)
+  local args = {[1]="Room3"}
+  game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("EnterRaidRoom"):FireServer(unpack(args))
+  args = {[1]={difficulty=selectedDifficulty,roomName="Room3",selectMapId=selectedMap}}
+  game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SelectRaidsDifficulty"):FireServer(unpack(args))
+  args = {[1]={userIds={[1]=game.Players.LocalPlayer.UserId},roomName="Room3"}}
+  game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("StartChallengeRaidMap"):InvokeServer(unpack(args))
+  local args = {[1]=1}
+  game:GetService("ReplicatedStorage").Remotes.GainRaidsRewards:InvokeServer(unpack(args))
+  local checkRemainingEnnemies = game.Workspace.Enemys:GetChildren()
+  if (#checkRemainingEnnemies <= 0) then
+    local args = {[1]={currentSlotIndex=1,toMapId=50201}}
+    game:GetService("ReplicatedStorage").Remotes.QuitRaidsMap:InvokeServer(unpack(args))
+    getgenv().Settings.AutoRaid = false
+    wait(5)
+  end
+end
+
+-- Create the toggle with the callback function
 RaidTab:AddToggle({Name="Turn On To Start",Default=false,Callback=function(AutoRaid)
-	if AutoRaid then
-		local selectedmap = getgenv().Settings.selectedmap;
-		local selecteddiff = getgenv().Settings.selecteddiff;
-		print("Selected Map: ", selectedmap);
-		print("Selected Difficulty: ", selecteddiff);
-		local args = {[1]="Room3"};
-		game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("EnterRaidRoom"):FireServer(unpack(args));
-		args = {[1]={difficulty=selecteddiff,roomName="Room3",selectMapId=selectedmap}};
-		game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SelectRaidsDifficulty"):FireServer(unpack(args));
-		args = {[1]={userIds={[1]=game.Players.LocalPlayer.UserId},roomName="Room3"}};
-		game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("StartChallengeRaidMap"):InvokeServer(unpack(args));
-		local args = {[1]=1};
-		game:GetService("ReplicatedStorage").Remotes.GainRaidsRewards:InvokeServer(unpack(args));
-		local checkRemainingEnnemies = game.Workspace.Enemys:GetChildren();
-		if (#checkRemainingEnnemies <= 0) then
-			local args = {[1]={currentSlotIndex=1,toMapId=50201}};
-			game:GetService("ReplicatedStorage").Remotes.QuitRaidsMap:InvokeServer(unpack(args));
-			getgenv().Settings.AutoRaid = false;
-			wait(5);
-		end
-	end
-end});
+  if AutoRaid then
+    onToggleTurnedOn()
+  end
+end})
+
 RaidTab:AddButton({Name="Rejoin Button",Callback=function()
 	game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer);
 end});
