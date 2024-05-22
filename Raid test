@@ -1,28 +1,27 @@
-    local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Orion/main/source'))()
-    if not OrionLib then
-        error("Failed to load the OrionLib library")
-        return
-    end
+local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Orion/main/source'))()
+if not OrionLib then
+    error("Failed to load the OrionLib library")
+    return
+end
 
-    local Window = OrionLib:MakeWindow({
-        Name = "Trade+Dupe Script",
-        HidePremium = false,
-        SaveConfig = true,
-        ConfigFolder = "WendelCfg",
-        IntroEnabled = false
-    })
+local Window = OrionLib:MakeWindow({
+    Name = "Raid Tests",
+    HidePremium = false,
+    SaveConfig = true,
+    ConfigFolder = "WendelCfg",
+    IntroEnabled = false
+})
 
-    -- Table to store global variables
-    getgenv().Settings = {
-
+-- Table to store global variables
+getgenv().Settings = {
     AutoRaid = false
 }
 
-    local RaidTab = Window:MakeTab({
-        Name = "AutoRaid",
-        Icon = "rbxassetid://4483345998",
-        PremiumOnly = false
-    })
+local RaidTab = Window:MakeTab({
+    Name = "AutoRaid",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
 
 local mapnames = {
     [50103]="Congress Hall",
@@ -62,16 +61,17 @@ RaidTab:AddDropdown({
     end
 })
 
-RaidTab:AddToggle({
-    Name = "Turn On To Start",
+local toggle = RaidTab:AddToggle({
+    Name = "AutoRaid Toggle",
     Default = false,
-    Callback = function(AutoRaid)
-        if AutoRaid then
+    Callback = function(state)
+        getgenv().Settings.AutoRaid = state
+        if state then
             local selectedmap = getgenv().Settings.selectedmap;
             local selecteddiff = getgenv().Settings.selecteddiff;
 
             print("Selected Map: ", selectedmap);
-            print("Selected Difficulty: ", selecteddiff);
+            print("Selected Difficulty:", selecteddiff);
 
             local args = {
                 [1] = "Room3"
