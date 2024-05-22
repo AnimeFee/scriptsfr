@@ -1,0 +1,118 @@
+    local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Orion/main/source'))()
+    if not OrionLib then
+        error("Failed to load the OrionLib library")
+        return
+    end
+
+    local Window = OrionLib:MakeWindow({
+        Name = "Trade+Dupe Script",
+        HidePremium = false,
+        SaveConfig = true,
+        ConfigFolder = "WendelCfg",
+        IntroEnabled = false
+    })
+
+    -- Table to store global variables
+    getgenv().Settings = {
+
+    AutoRaid = false
+}
+
+    local RaidTab = Window:MakeTab({
+        Name = "AutoRaid",
+        Icon = "rbxassetid://4483345998",
+        PremiumOnly = false
+    })
+
+local mapnames = {
+    [50103]="Book 1",
+    [50104]="Book 2",
+    [50105]="Book 3"
+}
+local mapdiff = {
+    [1]="Easy",
+    [2]="Medium",
+    [3]="Hard",
+    [4]="Impossible"
+}
+local worldnames = {}
+local diff = {}
+
+for _, name in pairs(mapnames) do
+    table.insert(worldnames, name)
+end
+
+for _, name in pairs(mapdiff) do
+    table.insert(diff, name)
+end
+
+RaidTab:AddDropdown({
+    Name="Select Raid Map",
+    Options=worldnames,
+    Callback=function(selectedmap)
+        getgenv().Settings.selectedmap = selectedmap
+    end
+})
+
+RaidTab:AddDropdown({
+    Name="Select Raid Difficulty",
+    Options=diff,
+    Callback=function(selecteddiff)
+        getgenv().Settings.selecteddiff = selecteddiff
+    end
+})
+
+AutoRaidTab:AddToggle({
+    Name = "Turn On To Start",
+    Default = false,
+    Callback = function(AutoRaid)
+        if AutoRaid then
+            local selectedmap = getgenv().Settings.selectedmap
+            local selecteddiff = getgenv().Settings.selecteddiff
+
+            local args = {
+                [1] = "Room3"
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("EnterRaidRoom"):FireServer(unpack(args))
+
+            args = {
+                [1] = {
+                    ["difficulty"] = selecteddiff,
+                    ["roomName"] = "Room3",
+                    ["selectMapId"] = selectedmap
+                }
+            }
+
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SelectRaidsDifficulty"):FireServer(unpack(args))
+
+            args = {
+                [1] = {
+                    ["userIds"] = {
+                        [1] = game.Players.LocalPlayer.UserId
+                    },
+                    ["roomName"] = "Room3"
+                }
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("StartChallengeRaidMap"):InvokeServer(unpack(args))
+
+            local args = {
+                [1] = 1
+            }
+            game:GetService("ReplicatedStorage").Remotes.GainRaidsRewards:InvokeServer(unpack(args))
+
+            local checkRemainingEnnemies = game.Workspace.Enemys:GetChildren()
+            if #checkRemainingEnnemies <= 0 then
+                local args = {
+                    [1] = {
+                        ["currentSlotIndex"] = 1,
+                        ["toMapId"] = 50201
+                    }
+                }
+                game:GetService("ReplicatedStorage").Remotes.QuitRaidsMap:InvokeServer(unpack(args))
+                getgenv().Settings.AutoRaid = false
+                game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+                wait(5)
+            end
+        end
+    end
+})
