@@ -73,6 +73,8 @@ RaidTab:AddToggle({
             print("Selected Map: ", selectedmap)
             print("Selected Difficulty: ", selecteddiff)
 
+wait(5)
+
             local args = {
                 [1] = "Room3"
             }
