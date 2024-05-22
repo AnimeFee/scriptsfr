@@ -62,7 +62,7 @@ RaidTab:AddDropdown({
     end
 })
 
-AutoRaidTab:AddToggle({
+RaidTab:AddToggle({
     Name = "Turn On To Start",
     Default = false,
     Callback = function(AutoRaid)
