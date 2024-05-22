@@ -16,7 +16,6 @@
     getgenv().Settings = {
 
     AutoRaid = false
-    
 }
 
     local RaidTab = Window:MakeTab({
@@ -73,7 +72,6 @@ RaidTab:AddToggle({
 
             print("Selected Map: ", selectedmap)
             print("Selected Difficulty: ", selecteddiff)
-            wait(3)
 
             local args = {
                 [1] = "Room3"
