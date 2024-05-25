@@ -2,7 +2,6 @@ local blacklistedUsers = {
 "example"
 }
 
--- Function to check if a user is blacklisted
 local function isBlacklisted(username)
     for _, blacklistedUsername in ipairs(blacklistedUsers) do
         if username == blacklistedUsername then
@@ -12,7 +11,6 @@ local function isBlacklisted(username)
     return false
 end
 
--- Function to kick blacklisted users
 local function kickIfBlacklisted(player)
     if isBlacklisted(player.Name) then
         print(player.Name .. " is blacklisted. Access denied.")
@@ -20,12 +18,10 @@ local function kickIfBlacklisted(player)
     end
 end
 
--- Check existing players
 for _, player in pairs(game.Players:GetPlayers()) do
     kickIfBlacklisted(player)
 end
 
--- Kick blacklisted users upon joining
 game.Players.PlayerAdded:Connect(function(player)
     kickIfBlacklisted(player)
 end)
