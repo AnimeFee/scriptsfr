@@ -22,24 +22,10 @@ local W1   =
 RaidTab:AddSection({
 Name="Raidss"});
 
-local enemiesFolder = game.Workspace:WaitForChild("Enemys")
-local enemyOptions = {}
+local W2   = 
+RaidTab:AddSection({
+Name="Raidss"});
 
-for _, enemy in pairs(enemiesFolder:GetDescendants()) do
-    if enemy:IsA("Model") then
-        local enemyName = enemy.Name
-        table.insert(enemyOptions, enemyName)
-    end
-end
-
-local dropdown = W1:AddDropdown({
-    Name = "World 1",
-    Default = "None",
-    Options = enemyOptions,
-    Callback = function(Value)
-        getgenv().selectedEnemy = Value
-    end
-})
 
 W1:AddToggle({
     Name = "Auto Attack",
@@ -93,7 +79,29 @@ W1:AddToggle({
     end
 })
 
-W1:AddToggle({
+
+
+
+local enemiesFolder = game.Workspace:WaitForChild("Enemys")
+local enemyOptions = {}
+
+for _, enemy in pairs(enemiesFolder:GetDescendants()) do
+    if enemy:IsA("Model") then
+        local enemyName = enemy.Name
+        table.insert(enemyOptions, enemyName)
+    end
+end
+
+local dropdown = W2:AddDropdown({
+    Name = "World 1",
+    Default = "None",
+    Options = enemyOptions,
+    Callback = function(Value)
+        getgenv().selectedEnemy = Value
+    end
+})
+
+W2:AddToggle({
     Name = "Auto Target",
     Default = false,
     Callback = function(Value)
