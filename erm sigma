@@ -1,0 +1,81 @@
+local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
+
+local Window = OrionLib:MakeWindow({
+    Name = "Raidsssss",
+    HidePremium = false,
+    SaveConfig = true,
+    ConfigFolder = "WendelCfg",
+    IntroEnabled = false
+})
+
+getgenv().Settings = {
+    AutoFarm1 = false
+}
+
+local RaidTab = Window:MakeTab({
+    Name = "AutoRaid",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+local W1 = RaidTab:AddSection({
+    Name = "Raidss"
+})
+
+local function teleportToEnemy(enemy)
+    if enemy:IsA("Model") then
+        local humanoidRootPart = enemy:FindFirstChild("HumanoidRootPart")
+
+        if humanoidRootPart then
+            local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+            hrp.CFrame = humanoidRootPart.CFrame
+        end
+    end
+end
+
+local function processEnemiesFolder()
+    local EnemysFolder = game.Workspace:WaitForChild("Enemys")
+    for _, v in pairs(EnemysFolder:GetChildren()) do
+        if not getgenv().Settings.AutoFarm1 then
+            return 
+        end
+        if v.Name == "Daki" or v.Name == "Rokuro" then
+            print("Teleporting to enemy: " .. v.Name)
+            teleportToEnemy(v)
+            task.wait(0.5)
+        end
+    end
+end
+
+local function autoFarm()
+    while getgenv().Settings.AutoFarm1 do
+        processEnemiesFolder()
+        task.wait(1)
+        
+        local allEnemiesDead = true
+        for _, v in pairs(game.Workspace.Enemys:GetChildren()) do
+            if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                allEnemiesDead = false
+                break
+            end
+        end
+        
+        if allEnemiesDead then
+            game:GetService("TeleportService"):TeleportAsync(11955772891, game.Players:GetPlayers())
+            break
+        end
+    end
+end
+
+W1:AddToggle({
+    Name = "Auto Attack",
+    Default = false,
+    Callback = function(Value)
+        getgenv().Settings.AutoFarm1 = Value
+        if Value then
+            spawn(autoFarm)
+        end
+    end
+})
+
+OrionLib:Init()
