@@ -1,30 +1,30 @@
 local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))();
 
 local Window = OrionLib:MakeWindow({
-Name = "Raidsssss",
-HidePremium=false,
-SaveConfig=true,
-ConfigFolder="WendelCfg",
-IntroEnabled=false});
+    Name = "Raidsssss",
+    HidePremium=false,
+    SaveConfig=true,
+    ConfigFolder="WendelCfg",
+    IntroEnabled=false});
 
 getgenv().Settings = 
 {
-AutoFarm1=false,
-AutoFarm2=false,
+    AutoFarm1=false,
+    AutoFarm2=false,
 }
 
 local RaidTab = Window:MakeTab({
-Name="AutoRaid",
-Icon="rbxassetid://4483345998",
-PremiumOnly=false});
+    Name="AutoRaid",
+    Icon="rbxassetid://4483345998",
+    PremiumOnly=false});
 
 local W1   = 
 RaidTab:AddSection({
-Name="Raidss"});
+    Name="Raidss"});
 
 local W2   = 
 RaidTab:AddSection({
-Name="Raidss"});
+    Name="Raidss"});
 
 
 W1:AddToggle({
@@ -43,33 +43,23 @@ W1:AddToggle({
                 end
             end
 
-            local currentEnemyIndex = 1
-
             while getgenv().Settings.AutoFarm1 do
-                local currentEnemy = enemies[currentEnemyIndex]
-
-                if currentEnemy then
-                    local mobID = currentEnemy:GetAttribute("ID")
-                    local humanoid = currentEnemy:FindFirstChildOfClass("Humanoid")
+                for _, enemy in pairs(enemies) do
+                    local mobID = enemy:GetAttribute("ID")
+                    local humanoid = enemy:FindFirstChildOfClass("Humanoid")
 
                     if humanoid then
                         local mobHealth = humanoid.Health
 
-                        if currentEnemy:FindFirstChild("HumanoidRootPart") then
+                        if enemy:FindFirstChild("HumanoidRootPart") then
                             repeat
-                                local hrpPosition = currentEnemy.HumanoidRootPart.CFrame
+                                local hrpPosition = enemy.HumanoidRootPart.CFrame
                                 hrp.CFrame = hrpPosition
                                 game:GetService("ReplicatedStorage").Remotes.AttackMob:FireServer(mobID)
                                 task.wait(0.1)
                                 mobHealth = humanoid.Health
                             until mobHealth <= 0 or not getgenv().Settings.AutoFarm1
                         end
-                    end
-
-                    currentEnemyIndex = currentEnemyIndex + 1
-
-                    if currentEnemyIndex > #enemies then
-                        currentEnemyIndex = 1
                     end
                 end
 
