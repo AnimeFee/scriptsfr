@@ -7,8 +7,7 @@ local Window = OrionLib:MakeWindow({
     ConfigFolder="WendelCfg",
     IntroEnabled=false});
 
-getgenv().Settings = 
-{
+getgenv().Settings = {
     AutoFarm1=false,
     AutoFarm2=false,
 }
@@ -18,16 +17,15 @@ local RaidTab = Window:MakeTab({
     Icon="rbxassetid://4483345998",
     PremiumOnly=false});
 
-local W1   = 
-RaidTab:AddSection({
+local W1 = RaidTab:AddSection({
     Name="!"});
 
-local W2   = 
-RaidTab:AddSection({
+local W2 = RaidTab:AddSection({
     Name="@"});
 
 local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
 local EnemysFolder = game.Workspace:WaitForChild("Enemys")
+
 local function attackEnemy(enemy)
     if enemy:IsA("Model") then
         local mobID = enemy:GetAttribute("ID")
