@@ -1,0 +1,125 @@
+local WeaponsInventory = require(game:GetService("ReplicatedStorage").Scripts.Client.Manager.PlayerManager);
+
+local function getEquippedHeroGuid()
+    for _, v in pairs(WeaponsInventory.localPlayerData.heros) do
+        if (v.isEquip == true) then
+            return v.guid;
+        end
+    end
+
+    return nil;
+end
+
+local possibleQuirks = {
+    ["gold"] = {
+        [1] = 99001,
+        [2] = 99002,
+        [3] = 99003,
+        [4] = 99004,
+        [5] = 99005
+    },
+    ["luck"] = {
+        [1] = 99047,
+        [2] = 99048,
+        [3] = 99006
+    },
+    ["damage"] = {
+        [1] = 99007,
+        [2] = 99008,
+        [3] = 99009,
+        [4] = 99010,
+        [5] = 99011
+    },
+    ["walkspeed"] = {
+        [1] = 99012,
+        [2] = 99013,
+        [3] = 99014,
+        [4] = 99015,
+        [5] = 99016
+    },
+    ["exp_add"] = {
+        [1] = 99017,
+        [2] = 99018,
+        [3] = 99019,
+        [4] = 99020,
+        [5] = 99021
+    },
+    ["item_drop"] = {
+        [1] = 99022,
+        [2] = 99023,
+        [3] = 99024,
+        [4] = 99025,
+        [5] = 99026
+    },
+    ["skill_dmg"] = {
+        [1] = 99027,
+        [2] = 99028,
+        [3] = 99029,
+        [4] = 99030,
+        [5] = 99031
+    },
+    ["equip_drop"] = {
+        [1] = 99032,
+        [2] = 99033,
+        [3] = 99034,
+        [4] = 99035,
+        [5] = 99036
+    },
+    ["crit_chance"] = {
+        [1] = 99037,
+        [2] = 99038,
+        [3] = 99039,
+        [4] = 99040,
+        [5] = 99041
+    },
+    ["crit_damage"] = {
+        [1] = 99042,
+        [2] = 99043,
+        [3] = 99044,
+        [4] = 99045,
+        [5] = 99046
+    }
+}
+
+local wantedQuirks = {
+    ["gold_5"] = 99005,
+    ["luck_3"] = 99006,
+    ["dmg_5"] = 99011,
+    ["ws_5"] = 99016,
+    ["ea_5"] = 99021,
+    ["id_5"] = 99026,
+    ["sd_5"] = 99031,
+    ["ed_5"] = 99036,
+    ["cc_5"] = 99041,
+    ["cd_5"] = 99046
+}
+
+function rerollHeroQuirk(heroGuid)
+    local args = {
+        [1] = {
+            ["heroGuid"] = heroGuid,
+            ["costItemId"] = 10030,
+            ["slotIndex"] = 1
+        }
+    }
+
+    local rerollResult = game:GetService("ReplicatedStorage").Remotes.RandomGainQuirkProperty:InvokeServer(unpack(args));
+    local quirkId = rerollResult.ornamentId;
+
+    for quirkType, quirkValue in pairs(wantedQuirks) do
+        if quirkId == quirkValue then
+            print("Rerolled quirk: " .. quirkType);
+            return;
+        end
+    end
+
+    print("Unknown reroll found ! : " .. tostring(rerollResult.ornamentId));
+end
+
+-- Reroll quirk on the equipped hero
+local equippedHeroGuid = getEquippedHeroGuid();
+if equippedHeroGuid then
+    rerollHeroQuirk(equippedHeroGuid);
+else
+    print("No equipped hero found.");
+end
