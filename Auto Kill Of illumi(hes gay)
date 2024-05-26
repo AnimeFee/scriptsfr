@@ -1,0 +1,118 @@
+local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))();
+
+local Window = OrionLib:MakeWindow({
+Name = "Raidsssss",
+HidePremium=false,
+SaveConfig=true,
+ConfigFolder="WendelCfg",
+IntroEnabled=false});
+
+getgenv().Settings = 
+{
+AutoFarm1=false,
+AutoFarm2=false,
+}
+
+local RaidTab = Window:MakeTab({
+Name="AutoRaid",
+Icon="rbxassetid://4483345998",
+PremiumOnly=false});
+
+local W1   = 
+RaidTab:AddSection({
+Name="Raidss"});
+
+W1:AddToggle({
+    Name = "Auto Attack",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoFarm1 = Value
+        if Value then 
+            while getgenv().AutoFarm do
+                local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+                local EnemysFolder = game.Workspace:WaitForChild("Enemys")
+
+                local function attackEnemy(enemy)
+                    if enemy:IsA("Model") then
+                        local mobID = enemy:GetAttribute("ID")
+                        local humanoid = enemy:FindFirstChildOfClass("Humanoid")
+
+                        if humanoid then
+                            local mobHealth = humanoid.Health
+
+                            if enemy:FindFirstChild("HumanoidRootPart") then
+                                repeat
+                                    local hrpPosition = enemy.HumanoidRootPart.CFrame
+                                    hrp.CFrame = hrpPosition
+                                    game:GetService("ReplicatedStorage").Remotes.AttackMob:FireServer(mobID)
+                                    task.wait(0.1)
+                                    mobHealth = humanoid.Health
+                                until mobHealth <= 0 or not getgenv().AutoFarm
+                            end
+                        end
+                    end
+                end
+
+                local function processEnemies()
+                    local daki = EnemysFolder:FindFirstChild("Daki")
+                    if daki then
+                        attackEnemy(daki)
+                    end
+
+                    local rokuro = EnemysFolder:FindFirstChild("Rokuro")
+                    if rokuro then
+                        attackEnemy(rokuro)
+                    end
+
+                    task.wait(1) -- Add a small delay between cycles
+                end
+
+                while getgenv().AutoFarm do
+                    processEnemies()
+                    task.wait(0.01)
+                end
+            end
+        end
+    end
+})
+
+W1:AddDropdown({
+    Name = "World 1",
+    Default = "Daki",
+    Options = {"Daki", "Rokuro"},
+    Callback = function(Value)
+        getgenv().selectedEnemy = Value
+    end
+})
+
+W1:AddToggle({
+    Name = "Auto Target",
+    Default = false,
+    Callback = function(Value)
+        getgenv().AutoFarm2 = Value
+        if Value then 
+            local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+
+            local EnemysFolder = game.Workspace:WaitForChild("Enemys"):GetDescendants()
+
+            local selectedMob = getgenv().selectedEnemy
+
+            for _, v in pairs(EnemysFolder) do 
+                if v:IsA("Model") and v.Name == selectedMob then
+                    local mobID = v:GetAttribute("ID") 
+                    local mobHealth = v.Humanoid.Health 
+
+                    if v:FindFirstChild("HumanoidRootPart") then 
+                        repeat
+                            task.wait(0.1)
+                            hrp.CFrame = v.HumanoidRootPart.CFrame
+                            game:GetService("ReplicatedStorage").Remotes.AttackMob:FireServer(mobID)
+                        until mobHealth <= 0 or not getgenv().AutoFarm 
+                    end 
+                end
+            end
+
+            print(mobID)  -- This will print the last mobID processed by the loop, if not nil
+        end
+    end
+})
