@@ -35,15 +35,21 @@ end
 
 local function processEnemiesFolder()
     local EnemysFolder = game.Workspace:WaitForChild("Enemys")
+    local enemies = {}
+
     for _, v in pairs(EnemysFolder:GetChildren()) do
+        if v:FindFirstChild("Humanoid") then
+            table.insert(enemies, v)
+        end
+    end
+
+    for _, enemy in ipairs(enemies) do
         if not getgenv().Settings.AutoFarm1 then
-            return 
+            return
         end
-        if v.Name == "Daki" or v.Name == "Rokuro" then
-            print("Teleporting to enemy: " .. v.Name)
-            teleportToEnemy(v)
-            task.wait(0.5)
-        end
+        print("Teleporting to enemy: " .. enemy.Name)
+        teleportToEnemy(enemy)
+        task.wait(0.5)
     end
 end
 
@@ -51,7 +57,7 @@ local function autoFarm()
     while getgenv().Settings.AutoFarm1 do
         processEnemiesFolder()
         task.wait(1)
-        
+
         local allEnemiesDead = true
         for _, v in pairs(game.Workspace.Enemys:GetChildren()) do
             if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
@@ -59,7 +65,7 @@ local function autoFarm()
                 break
             end
         end
-        
+
         if allEnemiesDead then
             game:GetService("TeleportService"):TeleportAsync(11955772891, game.Players:GetPlayers())
             break
