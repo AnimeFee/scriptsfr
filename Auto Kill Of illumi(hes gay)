@@ -26,9 +26,9 @@ W1:AddToggle({
     Name = "Auto Attack",
     Default = false,
     Callback = function(Value)
-        getgenv().AutoFarm1 = Value
+        getgenv().Settings.AutoFarm1 = Value
         if Value then 
-            while getgenv().AutoFarm do
+            while getgenv().Settings.AutoFarm1 do
                 local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
                 local EnemysFolder = game.Workspace:WaitForChild("Enemys")
 
@@ -47,7 +47,7 @@ W1:AddToggle({
                                     game:GetService("ReplicatedStorage").Remotes.AttackMob:FireServer(mobID)
                                     task.wait(0.1)
                                     mobHealth = humanoid.Health
-                                until mobHealth <= 0 or not getgenv().AutoFarm
+                                until mobHealth <= 0 or not getgenv().Settings.AutoFarm1
                             end
                         end
                     end
@@ -67,7 +67,7 @@ W1:AddToggle({
                     task.wait(1) -- Add a small delay between cycles
                 end
 
-                while getgenv().AutoFarm do
+                while getgenv().Settings.AutoFarm1 do
                     processEnemies()
                     task.wait(0.01)
                 end
@@ -78,41 +78,47 @@ W1:AddToggle({
 
 W1:AddDropdown({
     Name = "World 1",
-    Default = "Daki",
-    Options = {"Daki", "Rokuro"},
+    Default = "None",
+    Options = {},
     Callback = function(Value)
         getgenv().selectedEnemy = Value
     end
 })
 
+local enemiesFolder = game.Workspace:WaitForChild("Enemys")
+for _, enemy in pairs(enemiesFolder:GetDescendants()) do
+    if enemy:IsA("Model") then
+        local enemyName = enemy.Name
+        W1 Dropdowns["World 1"]:AddOption(enemyName)
+    end
+end
+
 W1:AddToggle({
     Name = "Auto Target",
     Default = false,
     Callback = function(Value)
-        getgenv().AutoFarm2 = Value
+        getgenv().Settings.AutoFarm2 = Value
         if Value then 
             local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
 
-            local EnemysFolder = game.Workspace:WaitForChild("Enemys"):GetDescendants()
+            local enemiesFolder = game.Workspace:WaitForChild("Enemys")
+            local enemyFolder = enemiesFolder:FindFirstChild(getgenv().selectedEnemy)
 
-            local selectedMob = getgenv().selectedEnemy
+            if enemyFolder then
+                while getgenv().Settings.AutoFarm2 do
+                    if enemyFolder:IsA("Model") then
+                        local humanoid = enemyFolder:FindFirstChildOfClass("Humanoid")
 
-            for _, v in pairs(EnemysFolder) do 
-                if v:IsA("Model") and v.Name == selectedMob then
-                    local mobID = v:GetAttribute("ID") 
-                    local mobHealth = v.Humanoid.Health 
-
-                    if v:FindFirstChild("HumanoidRootPart") then 
-                        repeat
+                        if humanoid then
+                            local enemyPosition = enemyFolder.HumanoidRootPart.CFrame
+                            hrp.CFrame = enemyPosition
+                            game:GetService("ReplicatedStorage").Remotes.AttackMob:FireServer(enemyFolder:GetAttribute("ID"))
                             task.wait(0.1)
-                            hrp.CFrame = v.HumanoidRootPart.CFrame
-                            game:GetService("ReplicatedStorage").Remotes.AttackMob:FireServer(mobID)
-                        until mobHealth <= 0 or not getgenv().AutoFarm 
-                    end 
+                        end
+                    end
+                    task.wait(0.01)
                 end
             end
-
-            print(mobID)  -- This will print the last mobID processed by the loop, if not nil
         end
     end
 })
