@@ -40,7 +40,6 @@ local function attackEnemy(enemy)
                 repeat
                     local hrpPosition = enemy.HumanoidRootPart.CFrame
                     hrp.CFrame = hrpPosition
-                    game:GetService("ReplicatedStorage").Remotes.AttackMob:FireServer(mobID)
                     task.wait(0.1)
                     mobHealth = humanoid.Health
                 until mobHealth <= 0 or not getgenv().AutoFarm1
