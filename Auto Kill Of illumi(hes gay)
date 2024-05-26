@@ -54,14 +54,10 @@ W1:AddToggle({
                 end
 
                 local function processEnemies()
-                    local daki = EnemysFolder:FindFirstChild("Daki")
-                    if daki then
-                        attackEnemy(daki)
-                    end
-
-                    local rokuro = EnemysFolder:FindFirstChild("Rokuro")
-                    if rokuro then
-                        attackEnemy(rokuro)
+                    for _, enemy in pairs(EnemysFolder:GetDescendants()) do
+                        if enemy:IsA("Model") then
+                            attackEnemy(enemy)
+                        end
                     end
 
                     task.wait(1) -- Add a small delay between cycles
