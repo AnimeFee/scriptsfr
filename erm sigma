@@ -9,7 +9,8 @@ local Window = OrionLib:MakeWindow({
 })
 
 getgenv().Settings = {
-    AutoFarm1 = false
+    AutoFarm1 = false,
+    AutoFarm2 = false,
 }
 
 local RaidTab = Window:MakeTab({
@@ -78,6 +79,70 @@ W1:AddToggle({
     Default = false,
     Callback = function(Value)
         getgenv().Settings.AutoFarm1 = Value
+        if Value then
+            spawn(autoFarm)
+        end
+    end
+})
+
+local function tweenToEnemy(enemy)
+    if enemy:IsA("Model") then
+        local humanoidRootPart = enemy:FindFirstChild("HumanoidRootPart")
+
+        if humanoidRootPart then
+            local playerHumanoidRootPart = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+            local tweenInfo = TweenInfo.new(2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, false, 0)
+            local tween = TweenService:Create(playerHumanoidRootPart, tweenInfo, {CFrame = humanoidRootPart.CFrame})
+            tween:Play()
+        end
+    end
+end
+
+local function processEnemiesFolder()
+    local EnemysFolder = game.Workspace:WaitForChild("Enemies")
+    local enemies = {}
+
+    for _, v in pairs(EnemysFolder:GetChildren()) do
+        if v:FindFirstChild("Humanoid") then
+            table.insert(enemies, v)
+        end
+    end
+
+    for _, enemy in ipairs(enemies) do
+        if not getgenv().Settings.AutoFarm2 then
+            return
+        end
+        print("Tweening to enemy: " .. enemy.Name)
+        tweenToEnemy(enemy)
+        task.wait(0.5)
+    end
+end
+
+local function autoFarm()
+    while getgenv().Settings.AutoFarm2 do
+        processEnemiesFolder()
+        task.wait(1)
+
+        local allEnemiesDead = true
+        for _, v in pairs(game.Workspace.Enemies:GetChildren()) do
+            if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                allEnemiesDead = false
+                break
+            end
+        end
+
+        if allEnemiesDead then
+            game:GetService("TeleportService"):TeleportAsync(11955772891, game.Players:GetPlayers())
+            break
+        end
+    end
+end
+
+W1:AddToggle({
+    Name = "Auto Attack(Tween)",
+    Default = false,
+    Callback = function(Value)
+        getgenv().Settings.AutoFarm2 = Value
         if Value then
             spawn(autoFarm)
         end
