@@ -20,15 +20,14 @@ local RaidTab = Window:MakeTab({
 
 local W1   = 
 RaidTab:AddSection({
-    Name="Raidss"});
+    Name="!"});
 
 local W2   = 
 RaidTab:AddSection({
-    Name="Raidss"});
+    Name="@"});
 
 local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
 local EnemysFolder = game.Workspace:WaitForChild("Enemys")
-
 local function attackEnemy(enemy)
     if enemy:IsA("Model") then
         local mobID = enemy:GetAttribute("ID")
@@ -41,20 +40,25 @@ local function attackEnemy(enemy)
                 repeat
                     local hrpPosition = enemy.HumanoidRootPart.CFrame
                     hrp.CFrame = hrpPosition
+                    game:GetService("ReplicatedStorage").Remotes.AttackMob:FireServer(mobID)
                     task.wait(0.1)
                     mobHealth = humanoid.Health
-                until mobHealth <= 0 or not getgenv().Settings.AutoFarm1
+                until mobHealth <= 0 or not getgenv().AutoFarm1
             end
         end
     end
 end
 
 local function processEnemies()
-    while getgenv().Settings.AutoFarm1 do
-        for _, enemy in pairs(EnemysFolder:GetDescendants()) do
-            if enemy:IsA("Model") then
-                attackEnemy(enemy)
-            end
+    while getgenv().AutoFarm1 do
+        local daki = EnemysFolder:FindFirstChild("Daki")
+        if daki then
+            attackEnemy(daki)
+        end
+
+        local rokuro = EnemysFolder:FindFirstChild("Rokuro")
+        if rokuro then
+            attackEnemy(rokuro)
         end
 
         task.wait(1) -- Add a small delay between cycles
@@ -62,11 +66,11 @@ local function processEnemies()
 end
 
 W1:AddToggle({
-    Name = "Auto Attack",
+    Name = "Auto Farm",
     Default = false,
     Callback = function(Value)
-        getgenv().Settings.AutoFarm1 = Value
-        if Value then 
+        getgenv().AutoFarm1 = Value
+        if Value then
             processEnemies()
         end
     end
