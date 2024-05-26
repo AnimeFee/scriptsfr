@@ -47,45 +47,47 @@ W1:AddToggle({
     Callback = function(Value)
         getgenv().Settings.AutoFarm1 = Value
         if Value then 
+            local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+            local EnemysFolder = game.Workspace:WaitForChild("Enemys")
+            local enemies = {}
+
+            for _, enemy in pairs(EnemysFolder:GetDescendants()) do
+                if enemy:IsA("Model") then
+                    table.insert(enemies, enemy)
+                end
+            end
+
+            local currentEnemyIndex = 1
+
             while getgenv().Settings.AutoFarm1 do
-                local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
-                local EnemysFolder = game.Workspace:WaitForChild("Enemys")
+                local currentEnemy = enemies[currentEnemyIndex]
 
-                local function attackEnemy(enemy)
-                    if enemy:IsA("Model") then
-                        local mobID = enemy:GetAttribute("ID")
-                        local humanoid = enemy:FindFirstChildOfClass("Humanoid")
+                if currentEnemy then
+                    local mobID = currentEnemy:GetAttribute("ID")
+                    local humanoid = currentEnemy:FindFirstChildOfClass("Humanoid")
 
-                        if humanoid then
-                            local mobHealth = humanoid.Health
+                    if humanoid then
+                        local mobHealth = humanoid.Health
 
-                            if enemy:FindFirstChild("HumanoidRootPart") then
-                                repeat
-                                    local hrpPosition = enemy.HumanoidRootPart.CFrame
-                                    hrp.CFrame = hrpPosition
-                                    game:GetService("ReplicatedStorage").Remotes.AttackMob:FireServer(mobID)
-                                    task.wait(0.1)
-                                    mobHealth = humanoid.Health
-                                until mobHealth <= 0 or not getgenv().Settings.AutoFarm1
-                            end
-                        end
-                    end
-                end
-
-                local function processEnemies()
-                    for _, enemy in pairs(EnemysFolder:GetDescendants()) do
-                        if enemy:IsA("Model") then
-                            attackEnemy(enemy)
+                        if currentEnemy:FindFirstChild("HumanoidRootPart") then
+                            repeat
+                                local hrpPosition = currentEnemy.HumanoidRootPart.CFrame
+                                hrp.CFrame = hrpPosition
+                                game:GetService("ReplicatedStorage").Remotes.AttackMob:FireServer(mobID)
+                                task.wait(0.1)
+                                mobHealth = humanoid.Health
+                            until mobHealth <= 0 or not getgenv().Settings.AutoFarm1
                         end
                     end
 
-                    task.wait(1) -- Add a small delay between cycles
+                    currentEnemyIndex = currentEnemyIndex + 1
+
+                    if currentEnemyIndex > #enemies then
+                        currentEnemyIndex = 1
+                    end
                 end
 
-                while getgenv().Settings.AutoFarm1 do
-                    processEnemies()
-                    task.wait(0.01)
-                end
+                task.wait(0.01)
             end
         end
     end
@@ -100,22 +102,37 @@ W1:AddToggle({
             local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
 
             local enemiesFolder = game.Workspace:WaitForChild("Enemys")
-            local enemyFolder = enemiesFolder:FindFirstChild(getgenv().selectedEnemy)
+            local enemies = {}
 
-            if enemyFolder then
-                while getgenv().Settings.AutoFarm2 do
-                    if enemyFolder:IsA("Model") then
-                        local humanoid = enemyFolder:FindFirstChildOfClass("Humanoid")
-
-                        if humanoid then
-                            local enemyPosition = enemyFolder.HumanoidRootPart.CFrame
-                            hrp.CFrame = enemyPosition
-                            game:GetService("ReplicatedStorage").Remotes.AttackMob:FireServer(enemyFolder:GetAttribute("ID"))
-                            task.wait(0.1)
-                        end
-                    end
-                    task.wait(0.01)
+            for _, enemy in pairs(enemiesFolder:GetDescendants()) do
+                if enemy:IsA("Model") then
+                    table.insert(enemies, enemy)
                 end
+            end
+
+            local currentEnemyIndex = 1
+
+            while getgenv().Settings.AutoFarm2 do
+                local currentEnemy = enemies[currentEnemyIndex]
+
+                if currentEnemy then
+                    local humanoid = currentEnemy:FindFirstChildOfClass("Humanoid")
+
+                    if humanoid then
+                        local enemyPosition = currentEnemy.HumanoidRootPart.CFrame
+                        hrp.CFrame = enemyPosition
+                        game:GetService("ReplicatedStorage").Remotes.AttackMob:FireServer(currentEnemy:GetAttribute("ID"))
+                        task.wait(0.1)
+                    end
+                end
+
+                currentEnemyIndex = currentEnemyIndex + 1
+
+                if currentEnemyIndex > #enemies then
+                    currentEnemyIndex = 1
+                end
+
+                task.wait(0.01)
             end
         end
     end
