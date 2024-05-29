@@ -1,5 +1,5 @@
 local blacklistedUsers = { 
-"example"
+"IN_TP7"
 }
 
 local function isBlacklisted(username)
