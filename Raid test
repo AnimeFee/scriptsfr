@@ -50,31 +50,48 @@ for _, name in pairs(mapdiff) do
 	table.insert(difficulty, name);
 end
 
+Raid:AddDropdown({
+Name="Select Raid Map",
+Options=worlds,
+Callback=function(selectedmap)
+getgenv().Settings.selectedmap = selectedmap;
+end});
+
+Raid:AddDropdown({
+Name="Select Raid Difficulty",
+Options=difficulty,
+Callback=function(selecteddiff)
+getgenv().Settings.selecteddiff = selecteddiff;
+end});
+
+OrionLib:MakeNotification({
+	Name = "D:",
+	Content = "Selected Map: ".. selectedMap.. "\nSelected Difficulty: ".. selectedDifficulty,
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+
+
 local function onToggleTurnedOn()
-
 wait(1)
-
 local selectedMap = 
 getgenv().Settings.selectedmap;
 local selectedDifficulty =
 getgenv().Settings.selecteddiff;
 
-print("Selected Map: ", selectedMap);
-print("Selected Difficulty: ", selectedDifficulty);
-
 wait(3)
-
 local args = {
-[1]="Room3"
-} 
-game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("EnterRaidRoom"):FireServer(unpack(args))
+[1] = "Room3"
+}
+game:GetService("ReplicatedStorage").Remotes.EnterRaidRoom:FireServer(unpack(args))
 
 args = {
 [1]={
-difficulty=selectedDifficulty,
+difficulty=selecteddiff,
 roomName="Room3",
 selectMapId=selectedMap,
-}} game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SelectRaidsDifficulty"):FireServer(unpack(args))
+}} 
+game:GetService("ReplicatedStorage").Remotes.SelectRaidsDifficulty:FireServer(unpack(args))
 
 args = {
 [1]={
@@ -83,16 +100,16 @@ userIds=
 [1]=game.Players.LocalPlayer.UserId
 },
 roomName="Room3"
-}} game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("StartChallengeRaidMap"):InvokeServer(unpack(args)) 
-
+}} 
+game:GetService("ReplicatedStorage").Remotes.StartChallengeRaidMap:InvokeServer(unpack(args))
 
 getgenv().Settings.AutoFarm = true 
 wait(10)
 
 local args = {
 [1]=1
-} game:GetService("ReplicatedStorage").Remotes.GainRaidsRewards:InvokeServer(unpack(args))
-
+}
+game:GetService("ReplicatedStorage").Remotes.GainRaidsRewards:InvokeServer(unpack(args))
 wait(5)
 
 local checkRemainingEnnemies =
@@ -104,7 +121,8 @@ local args =
 [1]={
 currentSlotIndex=1,
 toMapId=50201}
-} game:GetService("ReplicatedStorage").Remotes.QuitRaidsMap:InvokeServer(unpack(args))   
+}
+game:GetService("ReplicatedStorage").Remotes.QuitRaidsMap:InvokeServer(unpack(args))
 
 getgenv().Settings.AutoRaid  = false  
 getgenv().Settings.AutoFarm = false
@@ -120,19 +138,6 @@ onToggleTurnedOn()
 end
 end})
 
-Raid:AddDropdown({
-Name="Select Raid Map",
-Options=worlds,
-Callback=function(selectedmap)
-getgenv().Settings.selectedmap = selectedmap;
-end});
-
-Raid:AddDropdown({
-Name="Select Raid Difficulty",
-Options=difficulty,
-Callback=function(selecteddiff)
-getgenv().Settings.selecteddiff = selecteddiff;
-end});
 
 Relog:AddButton({
 Name="Rejoin Button",
