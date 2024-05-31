@@ -1,61 +1,219 @@
+-- Load Orion library
 local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))();
-local Window = OrionLib:MakeWindow({Name="Raidsssss",HidePremium=false,SaveConfig=true,ConfigFolder="WendelCfg",IntroEnabled=false});
 
-OrionLib:MakeNotification({Name="D:",Content=("Selected Map: " .. selectedMap .. "\nSelected Difficulty: " .. selectedDifficulty),Image="rbxassetid://4483345998",Time=5});
+-- Create Orion window
+local Window = OrionLib:MakeWindow({
+	Name = "Raidsssss",
+	HidePremium = false,
+	SaveConfig = true,
+	ConfigFolder = "WendelCfg",
+	IntroEnabled = false
+});
 
-getgenv().Settings = {AutoRaid=false,selectedmap=50102,selecteddiff=1};
+-- Define settings
+getgenv().Settings = {
+	AutoRaid = false,
+	SelectedMap = 50102,
+	SelectedDifficulty = 1
+};
 
-local RaidTab = Window:MakeTab({Name="AutoRaid",Icon="rbxassetid://4483345998",PremiumOnly=false});
+-- Create Raid tab
+local RaidTab = Window:MakeTab({
+	Name = "AutoRaid",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+});
 
-local Raid = RaidTab:AddSection({Name="Raidss"});
-local Relog = RaidTab:AddSection({Name="Rejoin(Will Restart Raid Time)"});
+-- Create Raid section
+local RaidSection = RaidTab:AddSection({Name = "Raidss"});
 
-local mapnames = {[50102]="Souls",[50103]="Congress Hall",[50104]="Border Territory",[50105]="Polar Plain"};
-local mapdiff = {[1]="Easy",[2]="Medium",[3]="Hard",[4]="Impossible"};
+-- Create Relog section
+local RelogSection = RaidTab:AddSection({Name = "Rejoin (Will Restart Raid Time)"});
+
+-- Define map names and difficulties
+local mapNames = {
+	[50102] = "Souls",
+	[50103] = "Congress Hall",
+	[50104] = "Border Territory",
+	[50105] = "Polar Plain"
+};
+
+local mapDifficulties = {
+	[1] = "Easy",
+	[2] = "Medium",
+	[3] = "Hard",
+	[4] = "Impossible"
+};
+
+-- Populate worlds and difficulty tables
 local worlds = {};
-local difficulty = {};
-for _, name in pairs(mapnames) do
+for _, name in pairs(mapNames) do
 	table.insert(worlds, name);
 end
-for _, name in pairs(mapdiff) do
-	table.insert(difficulty, name);
+
+local difficulties = {};
+for _, name in pairs(mapDifficulties) do
+	table.insert(difficulties, name);
 end
-Raid:AddDropdown({Name="Select Raid Map",Options=worlds,Callback=function(selectedmap)
-	getgenv().Settings.selectedmap = selectedmap;
-end});
-Raid:AddDropdown({Name="Select Raid Difficulty",Options=difficulty,Callback=function(selecteddiff)
-	getgenv().Settings.selecteddiff = selecteddiff;
-end});
-local function onToggleTurnedOn()
+
+-- Create Raid map dropdown
+RaidSection:AddDropdown({
+	Name = "Select Raid Map",
+	Options = worlds,
+	Callback = function(selectedMap)
+		getgenv().Settings.SelectedMap = selectedMap;
+	end
+});
+
+-- Create Raid difficulty dropdown
+RaidSection:AddDropdown({
+	Name = "Select Raid Difficulty",
+	Options = difficulties,
+	Callback = function(selectedDifficulty)
+		getgenv().Settings.SelectedDifficulty = selectedDifficulty;
+	end
+});
+
+-- Define function to start raid
+local function startRaid()
+	-- Wait for 1 second
 	wait(1);
-	local selectedMap = getgenv().Settings.selectedmap;
-	local selectedDifficulty = getgenv().Settings.selecteddiff;
+
+	-- Get selected map and difficulty
+	local selectedMap = getgenv().Settings.SelectedMap;
+	local selectedDifficulty = getgenv().Settings.SelectedDifficulty;
+
+	-- Wait for 3 seconds
 	wait(3);
-	local args = {[1]="Room3"};
-	game:GetService("ReplicatedStorage").Remotes.EnterRaidRoom:FireServer(unpack(args));
-	args = {[1]={difficulty=selecteddiff,roomName="Room3",selectMapId=selectedMap}};
-	game:GetService("ReplicatedStorage").Remotes.SelectRaidsDifficulty:FireServer(unpack(args));
-	args = {[1]={userIds={[1]=game.Players.LocalPlayer.UserId},roomName="Room3"}};
-	game:GetService("ReplicatedStorage").Remotes.StartChallengeRaidMap:InvokeServer(unpack(args));
+
+	-- Define arguments for EnterRaidRoom remote
+	local args = {[1] = "Room3"};
+
+	-- Call EnterRaidRoom remote
+	local success, errorMessage = pcall(function()
+		game:GetService("ReplicatedStorage").Remotes.EnterRaidRoom:FireServer(unpack(args));
+	end);
+
+	if not success then
+		warn("Failed to enter raid room: ", errorMessage);
+		return;
+	end
+
+	-- Define arguments for SelectRaidsDifficulty remote
+	args = {[1] = {
+		difficulty = selectedDifficulty,
+		roomName = "Room3",
+		selectMapId = selectedMap
+	}};
+
+	-- Call SelectRaidsDifficulty remote
+	success, errorMessage = pcall(function()
+		game:GetService("ReplicatedStorage").Remotes.SelectRaidsDifficulty:FireServer(unpack(args));
+	end);
+
+	if not success then
+		warn("Failed to select raid difficulty: ", errorMessage);
+		return;
+	end
+
+	-- Define arguments for StartChallengeRaidMap remote
+	args = {[1] = {
+		userIds = {[1] = game.Players.LocalPlayer.UserId},
+		roomName = "Room3"
+	}};
+
+	-- Call StartChallengeRaidMap remote
+	success, errorMessage = pcall(function()
+		game:GetService("ReplicatedStorage").Remotes.StartChallengeRaidMap:InvokeServer(unpack(args));
+	end);
+
+	if not success then
+		warn("Failed to start raid: ", errorMessage);
+		return;
+	end
+
+	-- Set AutoFarm setting to true
 	getgenv().Settings.AutoFarm = true;
+
+	-- Wait for 10 seconds
 	wait(10);
-	local args = {[1]=1};
-	game:GetService("ReplicatedStorage").Remotes.GainRaidsRewards:InvokeServer(unpack(args));
+
+	-- Define arguments for GainRaidsRewards remote
+	args = {[1] = 1};
+
+	-- Call GainRaidsRewards remote
+	success, errorMessage = pcall(function()
+		game:GetService("ReplicatedStorage").Remotes.GainRaidsRewards:InvokeServer(unpack(args));
+	end);
+
+	if not success then
+		warn("Failed to gain raid rewards: ", errorMessage);
+		return;
+	end
+
+	-- Wait for 5 seconds
 	wait(5);
-	local checkRemainingEnnemies = game.Workspace.Enemys:GetChildren();
-	if (#checkRemainingEnnemies <= 0) then
-		local args = {[1]={currentSlotIndex=1,toMapId=50201}};
-		game:GetService("ReplicatedStorage").Remotes.QuitRaidsMap:InvokeServer(unpack(args));
+
+	-- Check if there are any remaining enemies
+	local remainingEnemies = game.Workspace.Enemys:GetChildren();
+
+	if #remainingEnemies <= 0 then
+		-- Define arguments for QuitRaidsMap remote
+		args = {[1] = {
+			currentSlotIndex = 1,
+			toMapId = 50201
+		}};
+
+		-- Call QuitRaidsMap remote
+		success, errorMessage = pcall(function()
+			game:GetService("ReplicatedStorage").Remotes.QuitRaidsMap:InvokeServer(unpack(args));
+		end);
+
+		if not success then
+			warn("Failed to quit raid: ", errorMessage);
+			return;
+		end
+
+		-- Set AutoRaid and AutoFarm settings to false
 		getgenv().Settings.AutoRaid = false;
 		getgenv().Settings.AutoFarm = false;
+
+		-- Wait for 5 seconds
 		wait(5);
 	end
 end
-Raid:AddToggle({Name="Turn On To Start Raid",Default=false,Callback=function(AutoRaid)
-	if AutoRaid then
-		onToggleTurnedOn();
+
+-- Create Raid toggle
+RaidSection:AddToggle({
+	Name = "Turn On To Start Raid",
+	Default = false,
+	Callback = function(autoRaid)
+		if autoRaid then
+			startRaid();
+		end
 	end
-end});
-Relog:AddButton({Name="Rejoin Button",Callback=function()
+});
+
+-- Create Rejoin button
+RelogSection:AddButton({
+	Name = "Rejoin Button",
+	Callback = function()
+		game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer);
+	end
+});
+
+-- Check if the player has a weapon equipped
+if game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").Health == 0 then
+	-- Wait for 5 seconds
+	wait(5);
+
+	-- Rejoin the game
 	game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer);
-end});
+end
+
+-- Check if the player is in a raid
+if game:GetService("ReplicatedStorage").Remotes.RaidComplete:InvokeServer() then
+	-- Set AutoRaid and AutoFarm settings to false
+	getgenv().Settings.AutoRaid = false;
+	getgenv().Settings.AutoFarm = false;
+end
