@@ -7,6 +7,13 @@ SaveConfig=true,
 ConfigFolder="WendelCfg",
 IntroEnabled=false});
 
+OrionLib:MakeNotification({
+	Name = "D:",
+	Content = "Selected Map: ".. selectedMap.. "\nSelected Difficulty: ".. selectedDifficulty,
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+
 getgenv().Settings = 
 {
 AutoRaid = false ,
@@ -64,12 +71,7 @@ Callback=function(selecteddiff)
 getgenv().Settings.selecteddiff = selecteddiff;
 end});
 
-OrionLib:MakeNotification({
-	Name = "D:",
-	Content = "Selected Map: ".. selectedMap.. "\nSelected Difficulty: ".. selectedDifficulty,
-	Image = "rbxassetid://4483345998",
-	Time = 5
-})
+
 
 
 local function onToggleTurnedOn()
