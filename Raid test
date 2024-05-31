@@ -18,12 +18,12 @@ end
 for _, name in pairs(mapdiff) do
 	table.insert(difficulty, name);
 end
-local selectedMapIndex;
-local selectedDifficultyIndex;
+local selectedMap;
+local selectedDifficulty;
 Raid:AddDropdown({Name="Select Raid Map",Options=worlds,Callback=function(selectedmap)
 	for k, v in pairs(mapnames) do
 		if v == selectedmap then
-			selectedMapIndex = k;
+			selectedMap = k;
 			getgenv().Settings.selectedmap = k;
 		end
 	end
@@ -31,19 +31,16 @@ end});
 Raid:AddDropdown({Name="Select Raid Difficulty",Options=difficulty,Callback=function(selecteddiff)
 	for k, v in pairs(mapdiff) do
 		if v == selecteddiff then
-			selectedDifficultyIndex = k;
+			selectedDifficulty = k;
 			getgenv().Settings.selecteddiff = k;
 		end
 	end
 end});
 local function onToggleTurnedOn()
 	wait(1);
-	local selectedMap = getgenv().Settings.selectedmap;
-	local selectedDifficulty = getgenv().Settings.selecteddiff;
-	wait(3);
 	local args = {[1]="Room3"};
 	game:GetService("ReplicatedStorage").Remotes.EnterRaidRoom:FireServer(unpack(args));
-	args = {[1]={difficulty=selectedDifficulty,roomName="Room3",selectMapId=selectedMap}};
+	args = {[1]={difficulty=mapdiff[getgenv().Settings.selecteddiff],roomName="Room3",selectMapId=getgenv().Settings.selectedmap}};
 	game:GetService("ReplicatedStorage").Remotes.SelectRaidsDifficulty:FireServer(unpack(args));
 	args = {[1]={userIds={[1]=game.Players.LocalPlayer.UserId},roomName="Room3"}};
 	game:GetService("ReplicatedStorage").Remotes.StartChallengeRaidMap:InvokeServer(unpack(args));
