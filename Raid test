@@ -66,3 +66,4 @@ end});
 Relog:AddButton({Name="Rejoin Button",Callback=function()
 	game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer);
 end});
+OrionLib:Init()
