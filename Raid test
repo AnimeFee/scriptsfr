@@ -1,7 +1,7 @@
 local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))();
 local Window = OrionLib:MakeWindow({Name="Raidsssss",HidePremium=false,SaveConfig=true,ConfigFolder="WendelCfg",IntroEnabled=false});
 
-getgenv().Settings = {AutoRaid=false,selectedmap=50102,selecteddiff=1};
+getgenv().Settings = {AutoRaid=false,selectedmap=50102};
 
 local RaidTab = Window:MakeTab({Name="AutoRaid",Icon="rbxassetid://4483345998",PremiumOnly=false});
 
@@ -9,17 +9,11 @@ local Raid = RaidTab:AddSection({Name="Raidss"});
 local Relog = RaidTab:AddSection({Name="Rejoin(Will Restart Raid Time)"});
 
 local mapnames = {[50102]="Souls",[50103]="Congress Hall",[50104]="Border Territory",[50105]="Polar Plain"};
-local mapdiff = {[1]="Easy",[2]="Medium",[3]="Hard",[4]="Impossible"};
 local worlds = {};
-local difficulty = {};
 for _, name in pairs(mapnames) do
 	table.insert(worlds, name);
 end
-for _, name in pairs(mapdiff) do
-	table.insert(difficulty, name);
-end
 local selectedMap;
-local selectedDifficulty;
 Raid:AddDropdown({Name="Select Raid Map",Options=worlds,Callback=function(selectedmap)
 	for k, v in pairs(mapnames) do
 		if v == selectedmap then
@@ -28,19 +22,12 @@ Raid:AddDropdown({Name="Select Raid Map",Options=worlds,Callback=function(select
 		end
 	end
 end});
-Raid:AddDropdown({Name="Select Raid Difficulty",Options=difficulty,Callback=function(selecteddiff)
-	for k, v in pairs(mapdiff) do
-		if v == selecteddiff then
-			selectedDifficulty = k;
-			getgenv().Settings.selecteddiff = k;
-		end
-	end
-end});
+
 local function onToggleTurnedOn()
 	wait(1);
 	local args = {[1]="Room3"};
 	game:GetService("ReplicatedStorage").Remotes.EnterRaidRoom:FireServer(unpack(args));
-	args = {[1]={difficulty=mapdiff[getgenv().Settings.selecteddiff],roomName="Room3",selectMapId=getgenv().Settings.selectedmap}};
+	args = {[1]={difficulty=4,roomName="Room3",selectMapId=getgenv().Settings.selectedmap}};
 	game:GetService("ReplicatedStorage").Remotes.SelectRaidsDifficulty:FireServer(unpack(args));
 	args = {[1]={userIds={[1]=game.Players.LocalPlayer.UserId},roomName="Room3"}};
 	game:GetService("ReplicatedStorage").Remotes.StartChallengeRaidMap:InvokeServer(unpack(args));
