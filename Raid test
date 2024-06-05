@@ -1,7 +1,7 @@
 local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))();
 local Window = OrionLib:MakeWindow({Name="Raidsss",HidePremium=false,SaveConfig=true,ConfigFolder="WendelCfg",IntroEnabled=false});
 
-getgenv().Settings = {aRaid=false,raidmap=50102};
+getgenv().Settings = {aRaid=false,raidmap=50102,difficulty = 1};
 
 local RaidTab = Window:MakeTab({Name="AutoRaid",Icon="rbxassetid://4483345998",PremiumOnly=false});
 
@@ -20,13 +20,24 @@ Raid:AddDropdown({Name="Select Raid",Options=worlds,Callback=function(option)
 	getgenv().Settings.raidmap = option;
 end});
 
+Raid:AddDropdown({
+        Name = "Difficulty",
+        Options = { "Easy", "Medium", "Hard", "Impossible" },
+        CurrentOption = "1",
+        Callback = function(option)
+            getgenv().Settings.difficulty = tonumber(option)
+        end
+    })
+
 Raid:AddToggle({Name="Auto-Raid",Default=false,Callback=function(Value)
 	Value = aRaid
 	if aRaid then
 		local function restartScript()
 			local args = {[1]="Room3"};
 			game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("EnterRaidRoom"):FireServer(unpack(args));
-			args = {[1]={difficulty=4,roomName="Room3",selectMapId=raidmap}};
+			args = {[1]={difficulty=1,roomName="Room3",selectMapId=raidmap}};
+			game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SelectRaidsDifficulty"):FireServer(unpack(args));
+			args = {[1]={difficulty=difficulty,roomName="Room3",selectMapId=raidmap}};
 			game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SelectRaidsDifficulty"):FireServer(unpack(args));
 			args = {[1]={userIds={[1]=game.Players.LocalPlayer.UserId},roomName="Room3"}};
 			game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("StartChallengeRaidMap"):InvokeServer(unpack(args));
