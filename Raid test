@@ -6,8 +6,6 @@ local RaidTab = Window:MakeTab({Name="AutoRaid",Icon="rbxassetid://4483345998",P
 local Raid = RaidTab:AddSection({Name="Raidss"})
 local Relog = RaidTab:AddSection({Name="Rejoin(Will Restart Raid Time)"})
 
-local toggle = false
-local difficulty = 1
 
 Raid:AddDropdown({
     Name = "Select World",
