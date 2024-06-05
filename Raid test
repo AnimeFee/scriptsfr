@@ -9,95 +9,70 @@ local Relog = RaidTab:AddSection({Name="Rejoin(Will Restart Raid Time)"})
 local toggle = false
 local difficulty = 1
 
-Raid:AddToggle({
-    Name = "Auto-Raid",
-    Callback = function(state)
-        toggle = state
-        if toggle then
-            local function restartScript()
-                local userID = game.Players.LocalPlayer.UserId
-                local mapId = getMapId(difficulty)
-
-                local args = {
-                    [1] = "Room3"
-                }
-
-                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("EnterRaidRoom"):FireServer(unpack(args))
-
-                args = {
-                    [1] = {
-                        ["difficulty"] = 4,
-                        ["roomName"] = "Room3",
-                        ["selectMapId"] = mapId
-                    }
-                }
-
-                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SelectRaidsDifficulty"):FireServer(unpack(args))
-
-                args = {
-                    [1] = {
-                        ["userIds"] = {
-                            [1] = userID
-                        },
-                        ["roomName"] = "Room3"
-                    }
-                }
-
-                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("StartChallengeRaidMap"):InvokeServer(unpack(args))
-
-                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleportSuccess"):InvokeServer()
-
-                args = {
-                    [1] = {
-                        ["currentSlotIndex"] = 1,
-                        ["toMapId"] = 50201
-                    }
-                }
-
-                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("QuitRaidsMap"):InvokeServer(unpack(args))
-
-                wait(60)
-
-                restartScript()
-            end
-
-            restartScript()
-        end
-    end
-})
-
 Raid:AddDropdown({
-    Name = "Difficulty",
-    Options = { "World1", "World2", "World3", "World4" },
-    CurrentOption = "World1",
+    Name = "Select World",
+    Options = { "Souls", "Book 1", "Book 2", "Book 3" },
+    CurrentOption = "Souls",
     Callback = function(option)
         if option ~= "World1" and option ~= "World2" and option ~= "World3" and option ~= "World4" then
-            difficulty = tonumber(option)
-        else
-            if option == "World1" then
-                difficulty = 1
-            elseif option == "World2" then
-                difficulty = 2
-            elseif option == "World3" then
-                difficulty = 3
-            elseif option == "World4" then
-                difficulty = 4
-            end
+            getgenv().Settings.selectmap = tonumber(option)
+            return
+        end
+
+        local function restartScript(mapId)
+            local userID = game.Players.LocalPlayer.UserId
+            local args = {
+                [1] = "Room3"
+            }
+
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("EnterRaidRoom"):FireServer(unpack(args))
+
+            args = {
+                [1] = {
+                    ["difficulty"] = 4,
+                    ["roomName"] = "Room3",
+                    ["selectMapId"] = mapId
+                }
+            }
+
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SelectRaidsDifficulty"):FireServer(unpack(args))
+
+            args = {
+                [1] = {
+                    ["userIds"] = {
+                        [1] = userID
+                    },
+                    ["roomName"] = "Room3"
+                }
+            }
+
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("StartChallengeRaidMap"):InvokeServer(unpack(args))
+
+            args = {
+                [1] = {
+                    ["currentSlotIndex"] = 1,
+                    ["toMapId"] = 50201
+                }
+            }
+
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("QuitRaidsMap"):InvokeServer(unpack(args))
+
+            wait(60)
+
+            restartScript(mapId)
+        end
+
+        if option == "Souls" then
+            restartScript(50102)
+        elseif option == "Book 1" then
+            restartScript(50103)
+        elseif option == "Book 2" then
+            restartScript(50104)
+        elseif option == "Book 3" then
+            restartScript(50105)
         end
     end
 })
-
-local function getMapId(difficulty)
-    if difficulty == 1 then
-        return 50102
-    elseif difficulty == 2 then
-        return 50103
-    elseif difficulty == 3 then
-        return 50104
-    elseif difficulty == 4 then
-        return 50105
-    end
-end
 
 Relog:AddButton({Name="Rejoin Button",Callback=function()
     game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
