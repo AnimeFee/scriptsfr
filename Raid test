@@ -1,20 +1,23 @@
-local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))();
-local Window = OrionLib:MakeWindow({Name="Raidsss",HidePremium=false,SaveConfig=true,ConfigFolder="WendelCfg",IntroEnabled=false});
+local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
+local Window = OrionLib:MakeWindow({Name="Raidsss",HidePremium=false,SaveConfig=true,ConfigFolder="WendelCfg",IntroEnabled=false})
 
-local RaidTab = Window:MakeTab({Name="AutoRaid",Icon="rbxassetid://4483345998",PremiumOnly=false});
+local RaidTab = Window:MakeTab({Name="AutoRaid",Icon="rbxassetid://4483345998",PremiumOnly=false})
 
-local Raid = RaidTab:AddSection({Name="Raidss"});
-local Relog = RaidTab:AddSection({Name="Rejoin(Will Restart Raid Time)"});
+local Raid = RaidTab:AddSection({Name="Raidss"})
+local Relog = RaidTab:AddSection({Name="Rejoin(Will Restart Raid Time)"})
 
 local toggle = false
+local difficulty = 1
 
 Raid:AddToggle({
     Name = "Auto-Raid",
     Callback = function(state)
         toggle = state
         if toggle then
-            local function restartScript(mapId)
+            local function restartScript()
                 local userID = game.Players.LocalPlayer.UserId
+                local mapId = getMapId(difficulty)
+
                 local args = {
                     [1] = "Room3"
                 }
@@ -55,19 +58,10 @@ Raid:AddToggle({
 
                 wait(60)
 
-                restartScript(mapId)
+                restartScript()
             end
 
-            local difficulty = getgenv().Settings.difficulty
-            if difficulty == 1 then
-                restartScript(50102)
-            elseif difficulty == 2 then
-                restartScript(50103)
-            elseif difficulty == 3 then
-                restartScript(50104)
-            elseif difficulty == 4 then
-                restartScript(50105)
-            end
+            restartScript()
         end
     end
 })
@@ -78,24 +72,34 @@ Raid:AddDropdown({
     CurrentOption = "World1",
     Callback = function(option)
         if option ~= "World1" and option ~= "World2" and option ~= "World3" and option ~= "World4" then
-            getgenv().Settings.difficulty = tonumber(option)
+            difficulty = tonumber(option)
         else
-
             if option == "World1" then
-                getgenv().Settings.difficulty = 1
+                difficulty = 1
             elseif option == "World2" then
-                getgenv().Settings.difficulty = 2
+                difficulty = 2
             elseif option == "World3" then
-                getgenv().Settings.difficulty = 3
+                difficulty = 3
             elseif option == "World4" then
-                getgenv().Settings.difficulty = 4
+                difficulty = 4
             end
         end
     end
 })
 
-Relog:AddButton({Name="Rejoin Button",Callback=function()
-	game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+local function getMapId(difficulty)
+    if difficulty == 1 then
+        return 50102
+    elseif difficulty == 2 then
+        return 50103
+    elseif difficulty == 3 then
+        return 50104
+    elseif difficulty == 4 then
+        return 50105
+    end
 end
-});
 
+Relog:AddButton({Name="Rejoin Button",Callback=function()
+    game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+end
+})
