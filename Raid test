@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))();
-local Window = OrionLib:MakeWindow({Name="Raidsssss",HidePremium=false,SaveConfig=true,ConfigFolder="WendelCfg",IntroEnabled=false});
+local Window = OrionLib:MakeWindow({Name="Raidsss",HidePremium=false,SaveConfig=true,ConfigFolder="WendelCfg",IntroEnabled=false});
 
 getgenv().Settings = {aRaid=false,raidmap=50102};
 
