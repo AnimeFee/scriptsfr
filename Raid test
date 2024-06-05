@@ -1,7 +1,7 @@
 local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))();
 local Window = OrionLib:MakeWindow({Name="Raidsssss",HidePremium=false,SaveConfig=true,ConfigFolder="WendelCfg",IntroEnabled=false});
 
-getgenv().Settings = {AutoRaid=false,selectedmap=50102};
+getgenv().Settings = {AutoRaid=false,Raidmap=50102};
 
 local RaidTab = Window:MakeTab({Name="AutoRaid",Icon="rbxassetid://4483345998",PremiumOnly=false});
 
@@ -10,6 +10,7 @@ local Relog = RaidTab:AddSection({Name="Rejoin(Will Restart Raid Time)"});
 
 local mapnames = {[50102]="Souls",[50103]="Congress Hall",[50104]="Border Territory",[50105]="Polar Plain"};
 local worlds = {};
+
 for _, name in pairs(mapnames) do
 	table.insert(worlds, name);
 end
