@@ -13,44 +13,47 @@ local worlds = {};
 for _, name in pairs(mapnames) do
 	table.insert(worlds, name);
 end
-local selectedMap;
-Raid:AddDropdown({Name="Select Raid Map",Options=worlds,Callback=function(selectedmap)
-	for k, v in pairs(mapnames) do
-		if v == selectedmap then
-			selectedMap = k;
-			getgenv().Settings.selectedmap = k;
+
+
+Raid:AddDropdown({Name="Select Raid",Options=worlds,Callback=function(option)
+	getgenv().Settings.Raidmap = option;
+end});
+
+Raid:AddToggle({Name="Auto-Raid",Default=false,Callback=function(Value)
+	Value = ARaid
+	if ARaid then
+		local function restartScript()
+			local args = {[1]="Room3"};
+			game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("EnterRaidRoom"):FireServer(unpack(args));
+			args = {[1]={difficulty=4,roomName="Room3",selectMapId=getgenv().Settings.Raidmap}};
+			game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("SelectRaidsDifficulty"):FireServer(unpack(args));
+			args = {[1]={userIds={[1]=game.Players.LocalPlayer.UserId},roomName="Room3"}};
+			game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("StartChallengeRaidMap"):InvokeServer(unpack(args));
+			game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleportSuccess"):InvokeServer();
+			getgenv().Settings.AutoFarm = true
+			getgenv().Settings.GoldCollect = true
+			wait(5)
+			args = {
+             		[1] = 1
+              		}
+            		game:GetService("ReplicatedStorage").Remotes.GainRaidsRewards:InvokeServer(unpack(args))
+			wait(5)	
+			args = {[1]={currentSlotIndex=1,toMapId=50201}};
+			game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("QuitRaidsMap"):InvokeServer(unpack(args));
+			wait()
+			getgenv().Settings.AutoFarm = false
+			getgenv().Settings.GoldCollect = false 
+			args = {[1]={currentSlotIndex=1,toMapId=50201}};
+			game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("QuitRaidsMap"):InvokeServer(unpack(args));
+			wait(300);
+			restartScript();
 		end
+		restartScript();
 	end
 end});
 
-local function onToggleTurnedOn()
-	wait(1);
-	local args = {[1]="Room3"};
-	game:GetService("ReplicatedStorage").Remotes.EnterRaidRoom:FireServer(unpack(args));
-	args = {[1]={difficulty=4,roomName="Room3",selectMapId=getgenv().Settings.selectedmap}};
-	game:GetService("ReplicatedStorage").Remotes.SelectRaidsDifficulty:FireServer(unpack(args));
-	args = {[1]={userIds={[1]=game.Players.LocalPlayer.UserId},roomName="Room3"}};
-	game:GetService("ReplicatedStorage").Remotes.StartChallengeRaidMap:InvokeServer(unpack(args));
-	getgenv().Settings.AutoFarm = true;
-	wait(10);
-	local args = {[1]=1};
-	game:GetService("ReplicatedStorage").Remotes.GainRaidsRewards:InvokeServer(unpack(args));
-	wait(5);
-	local checkRemainingEnnemies = game.Workspace.Enemys:GetChildren();
-	if (#checkRemainingEnnemies <= 0) then
-		local args = {[1]={currentSlotIndex=1,toMapId=50201}};
-	game:GetService("ReplicatedStorage").Remotes.QuitRaidsMap:InvokeServer(unpack(args));
-		getgenv().Settings.AutoRaid = false;
-		getgenv().Settings.AutoFarm = false;
-		wait(5);
-	end
-end
-Raid:AddToggle({Name="Turn On To Start Raid",Default=false,Callback=function(AutoRaid)
-	if AutoRaid then
-		onToggleTurnedOn();
-	end
-end});
 Relog:AddButton({Name="Rejoin Button",Callback=function()
-	game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer);
-end});
-OrionLib:Init()
+	game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+end
+});
+
