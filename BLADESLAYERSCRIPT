@@ -1,24 +1,38 @@
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))() -- 
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 -- Bogus Performance Evaluation: x1.000
 local Window = OrionLib:MakeWindow({Name = "Cool Hub", HidePremium = false, SaveConfig = true, ConfigFolder = "Sigma"});
 
+getgenv().Settings = {
+    AutoFarm = false,
+    WalkToEnemy = false,
+    DamageBoost = false,
+    GoldCollect = false,
+    AutoAtk = false,
+    AutoReborn = false,
+    autoFuseSwords = false,
+    autoSellWeapons = false,
+    openEgg = false,
+    autoSellHeroes = false,
+    autoFuseHeroes = false,
+    fuseLevel10Gems = false,
+    deleteGems = false,
+    AutoFuseAllGems = false,
+    selectedTeleportMap = "",
+    selectedMount = "",
+    mespetsequiper = {}
+}
+
 local PlayerTab = Window:MakeTab({Name="Player",Icon="rbxassetid://4483345998",PremiumOnly=false});
-local ScriptsTab = Window:MakeTab({Name="Scripts",Icon="rbxassetid://4483345998",PremiumOnly=false});
 local WhtvrTab = Window:MakeTab({Name="Mount/Eggs",Icon="rbxassetid://4483345998",PremiumOnly=false});
-local AutoDRTab = Window:MakeTab({Name="Auto-Dungeon/Raid",Icon="rbxassetid://4483345998",PremiumOnly=false});
 local SNGTab = Window:MakeTab({Name="Sword And Gems",Icon="rbxassetid://4483345998",PremiumOnly=false});
 local AccesoryTab = Window:MakeTab({Name="Roll-Tab-Legendary",Icon="rbxassetid://4483345998",PremiumOnly=false});
 local MiscTab = Window:MakeTab({Name="Misc",Icon="rbxassetid://4483345998",PremiumOnly=false});
 
-local TradeSec = PlayerTab:AddSection({Name="Trade"});
-local Teleport = PlayerTab:AddSection({Name="Teleport"});
 local EMount = WhtvrTab:AddSection({Name="Mounts"});
 local EGG = WhtvrTab:AddSection({Name="Eggs"});
 local EGG1 = WhtvrTab:AddSection({Name="Lock Your Pets Before Using."});
-local FarmSec = ScriptsTab:AddSection({Name="Auto Farm"});
-local FarmSec2 = ScriptsTab:AddSection({Name="Others"});
-local Raid = AutoDRTab:AddSection({Name="Raid(WIP)"});
-local DungeonSec = AutoDRTab:AddSection({Name="Dungeon"});
+local FarmSec = PlayerTab:AddSection({Name="Auto Farm"});
+local FarmSec2 = PlayerTab:AddSection({Name="Others"});
 local SwordSec = SNGTab:AddSection({Name="Fuse/Sell Swords"});
 local Lvl10 = SNGTab:AddSection({Name="Auto Sell/Lvl 10 gem(Need Gems To Work)"});
 
@@ -53,32 +67,8 @@ EMount:AddButton({Name="Use Selected Mount",Callback=function()
 	end
 end});
 
-
-
-local playerNames = {};
-for _, player in pairs(game.Players:GetPlayers()) do
-	table.insert(playerNames, player.Name);
-end
-TradeSec:AddDropdown({Name="Select Player",Options=playerNames,Callback=function(selectedPlayer)
-	getgenv().getgenv().Settings.selectedPlayer = selectedPlayer;
-end});
-TradeSec:AddButton({Name="Trade Selected Player",Callback=function()
-	if getgenv().getgenv().Settings.selectedPlayer then
-		game:GetService("ReplicatedStorage").Remotes.SendTrade:InvokeServer(game:GetService("Players")[getgenv().getgenv().Settings.selectedPlayer]);
-	else
-		warn("No player selected.");
-	end
-end});
-TradeSec:AddButton({Name="Dupe(Need To Trade)",Callback=function()
-	game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("DeleteMultipleHero"):Destroy();
-end});
-
-FarmSec:AddToggle({Name="Auto Farm",Callback=function(v0)
-	if v0 then
-		getgenv().getgenv().Settings.AutoFarm = true;
-	else
-		getgenv().getgenv().Settings.AutoFarm = false;
-	end
+FarmSec:AddToggle({Name="Auto Farm",Callback=function(value)
+		getgenv().getgenv().Settings.AutoFarm = value;
 end});
 
 
@@ -377,66 +367,6 @@ EGG1:AddToggle({
     end
 });
 
-Teleport:AddDropdown({
-    Name = "Select Return Map",
-    Options ={
-        "Fantasy Valley(World 1)",
-        "Seaside Villa(World 2)",
-        "Congress Hall(World 3)",
-        "Border Territory(World 4)",
-        "Polar Plain(World 5)",
-        "Ghost Forest(World 6)",
-        "Demon Station(World 7)",
-        "Hashira Training(World 8)",
-        "Infinite City(World 9)",
-        "One Punch Man(World 10)"
-    },
-    Callback = function(selectedIndex)
-        getgenv().Settings.selectedTeleportMap = selectedIndex
-    end
-});
-
-Teleport:AddButton({
-    Name = "Teleport To Selected Map",
-    Callback = function()
-        local selectedMap = getgenv().Settings.selectedTeleportMap
-        if selectedMap == "Fantasy Valley(World 1)" then
-            local args = {[1]={mapId=50001}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "Seaside Villa(World 2)" then
-            local args = {[1]={mapId=50002}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "Congress Hall(World 3)" then
-            local args = {[1]={mapId=50003}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "Border Territory(World 4)" then
-            local args = {[1]={mapId=50004}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "Polar Plain(World 5)" then
-            local args = {[1]={mapId=50005}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "Ghost Forest(World 6)" then
-            local args = {[1]={mapId=50006}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "Demon Station(World 7)" then
-            local args = {[1]={mapId=50007}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "Hashira Training(World 8)" then
-            local args = {[1]={mapId=50008}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "Infinite City(World 9)" then
-            local args = {[1]={mapId=50009}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "One Punch Man(World 10)" then
-            local args = {[1]={mapId=50010}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        else
-            print("Invalid selection")
-        end
-    end
-});
-
-
 Lvl10:AddToggle({Name="Fuse Level 10 Gems",Callback=function(fuseLevel10Gems)
 	if fuseLevel10Gems then
 		getgenv().getgenv().Settings.fuseLevel10Gems = true;
@@ -456,6 +386,7 @@ Lvl10:AddToggle({Name="Fuse Level 10 Gems",Callback=function(fuseLevel10Gems)
 		getgenv().getgenv().Settings.fuseLevel10Gems = false;
 	end
 end});
+
 Lvl10:AddToggle({Name="Delete Gems",Callback=function(deleteGems)
 	if deleteGems then
 		getgenv().getgenv().Settings.deleteGems = true;
@@ -475,6 +406,7 @@ Lvl10:AddToggle({Name="Delete Gems",Callback=function(deleteGems)
 		getgenv().getgenv().Settings.deleteGems = false;
 	end
 end});
+
 local function GetFirstFiveGemIDs(level)
 	local player = game.Players.LocalPlayer;
 	local gui = player:WaitForChild("PlayerGui");
@@ -534,6 +466,7 @@ local function FuseFirstFiveGems(level)
 		wait(0.1);
 	end
 end
+
 Lvl10:AddToggle({Name="Auto Fuse All Level Gems",Default=false,Callback=function(Value)
 	getgenv().getgenv().Settings.AutoFuseAllGems = Value;
 	if Value then
@@ -547,8 +480,6 @@ Lvl10:AddToggle({Name="Auto Fuse All Level Gems",Default=false,Callback=function
 		end);
 	end
 end});
-
-
 
 function rerollLegendaryMask()
 	local rerollFound = false;
@@ -762,6 +693,7 @@ Mythic:AddButton({Name="Reroll Awakening",Callback=rerollMythicAwakening});
 Mythic:AddButton({Name="Reroll Ornament",Callback=rerollMythicOrnament});
 Mythic:AddButton({Name="Reroll Trail",Callback=rerollMythicTrail});
 
+
 Claim:AddButton({Name="Group Rewards",Callback=function()
 	while wait() do
 		game:GetService("ReplicatedStorage").Remotes.ClaimGroupReward:InvokeServer();
@@ -852,126 +784,3 @@ Others:AddButton({Name="Fps Booster",Callback=function()
 	end
 	sethiddenproperty(game.Lighting, "Technology", "Compatibility");
 end});
-
-Raid:AddDropdown({
-    Name = "Select Map",
-    Options = {"Souls","Book 1","Book 2","Book 3"},
-    Default = "",
-    Callback = function(option)
-        getgenv().Settings.selectedMap = option
-    end
-})
-
-local difficultyLevels = {
-    ["Easy"] = 1,
-    ["Medium"] = 2,
-    ["Hard"] = 3,
-    ["Impossible"] = 4
-}
-
-Raid:AddDropdown({
-    Name = "Select Difficulty",
-    Options = {"Easy","Medium","Hard","Impossible"},
-    Default = "Easy",
-    Callback = function(option)
-        getgenv().Settings.selectedDifficulty = difficultyLevels[option]
-    end
-})
-
-Raid:AddToggle({
-    Name = "Start Auto Raid",
-    Default = false,
-    Callback = function(bool)
-        getgenv().Settings.autoraid = bool
-        if bool then
-            doRaid()
-        end
-    end
-})
-
-Raid:AddLabel("Click When Chest Has Spawned")
-Raid:AddButton({
-    Name = "Auto Collect Chest In Raid",
-    Callback = function()
-        local chestPart = game:GetService("Workspace").EnchantChest.Part
-        if not chestPart then
-            return
-        end
-        local player = game.Players.LocalPlayer
-        local character = player.Character or player.CharacterAdded:Wait()
-        if not character then
-            return
-        end
-        local targetPosition = chestPart.Position
-        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-        if not humanoidRootPart then
-            return
-        end
-        humanoidRootPart.CFrame = CFrame.new(targetPosition)
-        wait(1)
-    end
-})
-
-function doRaid()
-    while getgenv().Settings.autoraid do
-        local args = {}
-        if getgenv().Settings.selectedMap == "Souls" then
-            args = "Room4"
-            game:GetService("ReplicatedStorage").Remotes.EnterRaidRoom:FireServer(args)
-            args = {difficulty=getgenv().Settings.selectedDifficulty,roomName="Room4",selectMapId=50102}
-            game:GetService("ReplicatedStorage").Remotes.SelectRaidsDifficulty:FireServer(args)
-            wait(0.5)
-            args = {userIds={game.Players.LocalPlayer.UserId},roomName="Room4"}
-            game:GetService("ReplicatedStorage").Remotes.StartChallengeRaidMap:InvokeServer(args)
-            wait(5)
-        elseif getgenv().Settings.selectedMap == "Book 1" then
-            args = "Room4"
-            game:GetService("ReplicatedStorage").Remotes.EnterRaidRoom:FireServer(args)
-            args = {difficulty=getgenv().Settings.selectedDifficulty,roomName="Room4",selectMapId=50103}
-            game:GetService("ReplicatedStorage").Remotes.SelectRaidsDifficulty:FireServer(args)
-            wait(0.5)
-            args = {userIds={game.Players.LocalPlayer.UserId},roomName="Room4"}
-            game:GetService("ReplicatedStorage").Remotes.StartChallengeRaidMap:InvokeServer(args)
-            wait(5)
-        elseif getgenv().Settings.selectedMap == "Book 2" then
-            args = "Room4"
-            game:GetService("ReplicatedStorage").Remotes.EnterRaidRoom:FireServer(args)
-            args = {difficulty=getgenv().Settings.selectedDifficulty,roomName="Room4",selectMapId=50104}
-            game:GetService("ReplicatedStorage").Remotes.SelectRaidsDifficulty:FireServer(args)
-            wait(0.5)
-            args = {userIds={game.Players.LocalPlayer.UserId},roomName="Room4"}
-            game:GetService("ReplicatedStorage").Remotes.StartChallengeRaidMap:InvokeServer(args)
-            wait(5)
-        elseif getgenv().Settings.selectedMap == "Book 3" then
-            args = "Room4"
-            game:GetService("ReplicatedStorage").Remotes.EnterRaidRoom:FireServer(args)
-            args = {difficulty=getgenv().Settings.selectedDifficulty,roomName="Room4",selectMapId=50105}
-            game:GetService("ReplicatedStorage").Remotes.SelectRaidsDifficulty:FireServer(args)
-            wait(0.5)
-            args = {userIds={game.Players.LocalPlayer.UserId},roomName="Room4"}
-            game:GetService("ReplicatedStorage").Remotes.StartChallengeRaidMap:InvokeServer(args)
-            wait(5)
-       end
-        wait()
-    end
-end
-
-DungeonSec:AddToggle({
-    Name = "Auto-Dungeon",
-    Default = false,
-    Callback = function(Value)
-        getgenv().Settings.autodungeon = Value
-        if getgenv().Settings.autodungeon then
-            spawn(function()
-                while getgenv().Settings.autodungeon do
-                    local currentTime = os.time();
-                    local nextTeleportTime = (math.ceil(currentTime / (30 * 60)) * 30 * 60) - 50;
-                    local waitTime = nextTeleportTime - currentTime;
-                    wait(waitTime);
-                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer({mapId = 50001});
-                    wait(300); -- wait for 5 minutes
-                end
-            end)
-        end
-    end
-})
