@@ -67,68 +67,6 @@ EMount:AddButton({Name="Use Selected Mount",Callback=function()
 	end
 end});
 
-FarmSec:AddToggle({Name="Auto Farm",Callback=function(value)
-		getgenv().Settings.AutoFarm = value;
-end});
-
-
-local WeaponsInventory = require(game:GetService("ReplicatedStorage").Scripts.Client.Manager.PlayerManager)
-pcall(function()
-    for _, v in pairs(WeaponsInventory.localPlayerData.heros) do
-        if v.isEquip == true and v.isLock == true then
-            table.insert(getgenv().Settings.mespetsequiper, v.guid)
-        end
-    end
-end)
-
-spawn(function()
-    local function GetEnemies()
-        local nearest, dist = nil, getgenv().Settings.Range
-        local Players = game:GetService("Players")
-        local localPlayer = Players.LocalPlayer
-        local localCharacter = localPlayer.Character
-        local humanoidRootPart = localCharacter and localCharacter:FindFirstChild("HumanoidRootPart")
-        if not humanoidRootPart then
-            return
-        end
-
-        for _, enemy in pairs(workspace.Enemys:GetChildren()) do
-            if enemy:FindFirstChild("HumanoidRootPart") and enemy.HumanoidRootPart:FindFirstChild("EnemyNameGui") and enemy.HumanoidRootPart.EnemyNameGui.HealthNum.Text ~= "0" then
-                local distance = (humanoidRootPart.Position - enemy.HumanoidRootPart.Position).magnitude
-                if distance < dist then
-                    dist = distance
-                    nearest = enemy
-                end
-            end
-        end
-        return nearest
-    end
-
-    while task.wait() do
-        while getgenv().Settings.AutoFarm do
-            local nearestEnemy = GetEnemies()
-            if nearestEnemy then
-                if getgenv().Settings.WalkToEnemy then
-                    if nearestEnemy:FindFirstChild("HumanoidRootPart") then
-                        localPlayer.Character.Humanoid:MoveTo(nearestEnemy.HumanoidRootPart.Position)
-                    end
-                end
-
-                if getgenv().Settings.DamageBoost then
-                    for _, petGuid in pairs(getgenv().Settings.mespetsequiper) do
-                        local args = { { ["heroGuid"] = tostring(petGuid), ["harmIndex"] = 1, ["isSkill"] = false, ["skillId"] = 200003 } }
-                        game:GetService("ReplicatedStorage").Remotes.HeroSkillHarm:FireServer(unpack(args))
-                    end
-                end
-
-                local args = { nearestEnemy:GetAttribute("EnemyGuid") }
-                game:GetService("ReplicatedStorage").Remotes.ClickEnemy:InvokeServer(unpack(args))
-                game:GetService("ReplicatedStorage").Remotes.PlayerClickAttack:FireServer(unpack(args))
-            end
-        end
-    end
-end)
-
 FarmSec:AddToggle({Name="Auto Collect Drops",Callback=function(v1)
 	if v1 then
 		getgenv().Settings.GoldCollect = not getgenv().Settings.GoldCollect;
