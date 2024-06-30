@@ -84,7 +84,7 @@ end)
 spawn(function()
     local function GetEnemies()
         local nearest, dist = nil, getgenv().Settings.Range
-        local Players = game.Players
+        local Players = game:GetService("Players")
         local localPlayer = Players.LocalPlayer
         local localCharacter = localPlayer.Character
         local humanoidRootPart = localCharacter and localCharacter:FindFirstChild("HumanoidRootPart")
@@ -92,7 +92,7 @@ spawn(function()
             return
         end
 
-        for _, enemy in pairs(Workspace.Enemys:GetChildren()) do
+        for _, enemy in pairs(workspace.Enemys:GetChildren()) do
             if enemy:FindFirstChild("HumanoidRootPart") and enemy.HumanoidRootPart:FindFirstChild("EnemyNameGui") and enemy.HumanoidRootPart.EnemyNameGui.HealthNum.Text ~= "0" then
                 local distance = (humanoidRootPart.Position - enemy.HumanoidRootPart.Position).magnitude
                 if distance < dist then
@@ -110,7 +110,7 @@ spawn(function()
             if nearestEnemy then
                 if getgenv().Settings.WalkToEnemy then
                     if nearestEnemy:FindFirstChild("HumanoidRootPart") then
-                        player.Character.Humanoid:MoveTo(nearestEnemy.HumanoidRootPart.Position)
+                        localPlayer.Character.Humanoid:MoveTo(nearestEnemy.HumanoidRootPart.Position)
                     end
                 end
 
@@ -304,9 +304,6 @@ end);
 EGG1:AddLabel("Will Fuse to Equiped Heroes")
 EGG1:AddLabel("Will Delete/Fuse The Uneqquiped and Unlocked Heroes")
 
-
-
-
 EGG1:AddToggle({
     Name="Auto Delete Heroes",
     Callback=function(autoSellHeroes)
@@ -367,7 +364,7 @@ EGG1:AddToggle({
     end
 });
 
-Lvl10:AddToggle({Name="Fuse Level 10 Gems",Callback=function(fuseLevel10Gems)
+Lvl10:AddToggle({Name="Gemdupe?,Callback=function(fuseLevel10Gems)
 	if fuseLevel10Gems then
 		getgenv().Settings.fuseLevel10Gems = true;
 		pcall(function()
