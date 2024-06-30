@@ -1,32 +1,23 @@
-local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Orion/main/source'))() if not OrionLib then error("Failed to load the OrionLib library") return end
 
-local window = Rayfield:CreateWindow({
-    Name = "Trade+Dupe Script",
-    LoadingTitle = "Trade+Dupe Script",
-    LoadingSubtitle = "by Wendel",
-    ConfigurationSaving = {
-        Enabled = true,
-        FolderName = "WendelCfg",
-        FileName = "Trade+Dupe Script"
-    },
-    Discord = {
-        Enabled = false,
-        Invite = "",
-        RememberJoins = true
-    }
-})
+local Window = OrionLib:MakeWindow({
+        Name = "Trade+Dupe Script",
+        HidePremium = false,
+        SaveConfig = true,
+        ConfigFolder = "WendelCfg",
+        IntroEnabled = false
+    })
 
-local autogem = false
+    -- Creating the Player tab
+    local PlayerTab = Window:MakeTab({
+        Name = "Player",
+        Icon = "rbxassetid://4483345998", PremiumOnly = false
+    })
 
--- Creating the Player tab
-local playerTab = window:CreateTab("Player", 4483345998)
-
-for level = 10, 12 do
-    playerTab:CreateToggle({
-        Name = "Fuse Gems for Level ".. level,
-        Callback = function(value)
-            autogem = value
-            while autogem do
+    for level = 10, 12 do
+        PlayerTab:AddButton({
+            Name = "Fuse Gems for Level " .. level,
+            Callback = function()
                 local function GetNextGemID(currentLevel)
                     local player = game.Players.LocalPlayer
                     local gui = player:WaitForChild("PlayerGui")
@@ -49,7 +40,6 @@ for level = 10, 12 do
                     else
                         error("Error: ScrollingFrame not found.")
                     end
-                    wait()
                     return nil
                 end
                 local function FuseGems()
@@ -68,12 +58,11 @@ for level = 10, 12 do
                                 }
                             }
                             game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("FuseGem"):InvokeServer(unpack(args))
-                            wait(0.000001)
-                        end
+                        wait(0.000001)
                     end
                 end
+
                 FuseGems()
             end
-        end
-    })
-end
+        })
+    end
