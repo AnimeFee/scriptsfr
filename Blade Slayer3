@@ -23,7 +23,6 @@ getgenv().Settings = {
 }
 
 local PlayerTab = Window:MakeTab({Name="Player",Icon="rbxassetid://4483345998",PremiumOnly=false});
-local ScriptsTab = Window:MakeTab({Name="Scripts",Icon="rbxassetid://4483345998",PremiumOnly=false});
 local WhtvrTab = Window:MakeTab({Name="Mount/Eggs",Icon="rbxassetid://4483345998",PremiumOnly=false});
 local SNGTab = Window:MakeTab({Name="Sword And Gems",Icon="rbxassetid://4483345998",PremiumOnly=false});
 local AccesoryTab = Window:MakeTab({Name="Roll-Tab-Legendary",Icon="rbxassetid://4483345998",PremiumOnly=false});
