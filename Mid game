@@ -8,6 +8,8 @@ local Window = OrionLib:MakeWindow({
         IntroEnabled = false
     })
 
+local autogem = false
+
     -- Creating the Player tab
     local PlayerTab = Window:MakeTab({
         Name = "Player",
@@ -15,9 +17,11 @@ local Window = OrionLib:MakeWindow({
     })
 
     for level = 10, 12 do
-        PlayerTab:AddButton({
+        PlayerTab:AddToggle({
             Name = "Fuse Gems for Level " .. level,
-            Callback = function()
+            Callback = function(value)
+autogem = value
+while autogem do
                 local function GetNextGemID(currentLevel)
                     local player = game.Players.LocalPlayer
                     local gui = player:WaitForChild("PlayerGui")
@@ -64,5 +68,6 @@ local Window = OrionLib:MakeWindow({
 
                 FuseGems()
             end
+end
         })
     end
