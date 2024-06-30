@@ -95,3 +95,105 @@ local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/shle
                 FuseGems()
             end
         })
+
+local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Orion/main/source'))() if not OrionLib then error("Failed to load the OrionLib library") return end
+
+-- Checking if the PlaceId condition is satisfied
+if game.PlaceId == 15744137588 then
+    -- Loading the OrionLib library
+
+    -- Creating the main window
+    local Window = OrionLib:MakeWindow({
+        Name = "Trade+Dupe Script",
+        HidePremium = false,
+        SaveConfig = true,
+        ConfigFolder = "WendelCfg",
+        IntroEnabled = false
+    })
+
+    -- Table to store global variables
+    local G = {}
+
+    -- Creating the Player tab
+    local PlayerTab = Window:MakeTab({
+        Name = "Player",
+        Icon = "rbxassetid://4483345998", PremiumOnly = false
+    })
+
+    -- Adding buttons for each level to the Player tab
+    for level = 1, 9 do
+        PlayerTab:AddButton({
+            Name = "Fuse Gems for Level " .. level,
+            Callback = function()
+                local function GetNextGemID(currentLevel)
+                    local player = game.Players.LocalPlayer
+
+                    -- Get a reference to the ScrollingFrame inside the player's GUI
+                    local gui = player:WaitForChild("PlayerGui")
+                    local gemsPanel = gui:WaitForChild("GemsPanel")
+                    local frame = gemsPanel:WaitForChild("Frame")
+                    local bgImage = frame:WaitForChild("BgImage")
+                    local list = bgImage:WaitForChild("List")
+                    local scrollingFrame = list:WaitForChild("ScrollingFrame")
+
+                    -- Check if the ScrollingFrame exists
+                    if scrollingFrame then
+                        -- Iterate through each child of the ScrollingFrame
+                        for _, child in ipairs(scrollingFrame:GetChildren()) do
+                            -- Find the "numtext" child inside the current child
+                            local numtext = child:FindFirstChild("NumText")
+
+                            -- Check if "numtext" exists and if its text matches the current level
+                            if numtext then
+                                local level = tonumber(numtext.Text:match("%d+"))
+                                if level == currentLevel then
+                                    return child.Name -- Return the ID of the gem
+                                end
+                            end
+                        end
+                    else
+                        error("Error: ScrollingFrame not found.")
+                    end
+
+                    -- If no matching gem ID was found, return nil
+                    return nil
+                end
+
+                local function FuseGems()
+                    local currentLevel = level
+
+                    while currentLevel <= 10 do
+                        local gemID = GetNextGemID(currentLevel)
+
+                        if gemID then
+                            print("Level", currentLevel, "gem ID found:", gemID)
+                            currentLevel = currentLevel + 1 -- Increment the level for the next iteration
+
+                            -- Construct the args table with gemID repeated five times
+                            local args = {
+                                [1] = {
+                                    [1] = gemID,
+                                    [2] = gemID,
+                                    [3] = gemID,
+                                    [4] = gemID,
+                                    [5] = gemID
+                                }
+                            }
+
+                            print("Invoking FuseGem remote with args:", args)
+
+                            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("FuseGem"):InvokeServer(unpack(args))
+                        else
+                            print("Error: Could not find gem ID for level", currentLevel)
+                        end
+
+                        -- Wait for some time before checking for the next level
+                        wait(0.000001)
+                    end
+                end
+
+                FuseGems()
+            end
+        })
+    end
+end
