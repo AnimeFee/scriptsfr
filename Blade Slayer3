@@ -2,6 +2,26 @@ local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shl
 -- Bogus Performance Evaluation: x1.000
 local Window = OrionLib:MakeWindow({Name = "Cool Hub", HidePremium = false, SaveConfig = true, ConfigFolder = "Sigma"});
 
+getgenv().Settings = {
+    AutoFarm = false,
+    WalkToEnemy = false,
+    DamageBoost = false,
+    GoldCollect = false,
+    AutoAtk = false,
+    AutoReborn = false,
+    autoFuseSwords = false,
+    autoSellWeapons = false,
+    openEgg = false,
+    autoSellHeroes = false,
+    autoFuseHeroes = false,
+    fuseLevel10Gems = false,
+    deleteGems = false,
+    AutoFuseAllGems = false,
+    selectedTeleportMap = "",
+    selectedMount = "",
+    mespetsequiper = {}
+}
+
 local PlayerTab = Window:MakeTab({Name="Player",Icon="rbxassetid://4483345998",PremiumOnly=false});
 local ScriptsTab = Window:MakeTab({Name="Scripts",Icon="rbxassetid://4483345998",PremiumOnly=false});
 local WhtvrTab = Window:MakeTab({Name="Mount/Eggs",Icon="rbxassetid://4483345998",PremiumOnly=false});
@@ -9,12 +29,11 @@ local SNGTab = Window:MakeTab({Name="Sword And Gems",Icon="rbxassetid://44833459
 local AccesoryTab = Window:MakeTab({Name="Roll-Tab-Legendary",Icon="rbxassetid://4483345998",PremiumOnly=false});
 local MiscTab = Window:MakeTab({Name="Misc",Icon="rbxassetid://4483345998",PremiumOnly=false});
 
-local Teleport = PlayerTab:AddSection({Name="Teleport"});
 local EMount = WhtvrTab:AddSection({Name="Mounts"});
 local EGG = WhtvrTab:AddSection({Name="Eggs"});
 local EGG1 = WhtvrTab:AddSection({Name="Lock Your Pets Before Using."});
-local FarmSec = ScriptsTab:AddSection({Name="Auto Farm"});
-local FarmSec2 = ScriptsTab:AddSection({Name="Others"});
+local FarmSec = PlayerTab:AddSection({Name="Auto Farm"});
+local FarmSec2 = PlayerTab:AddSection({Name="Others"});
 local SwordSec = SNGTab:AddSection({Name="Fuse/Sell Swords"});
 local Lvl10 = SNGTab:AddSection({Name="Auto Sell/Lvl 10 gem(Need Gems To Work)"});
 
@@ -51,7 +70,6 @@ end});
 
 FarmSec:AddToggle({Name="Auto Farm",Callback=function(value)
 		getgenv().getgenv().Settings.AutoFarm = value;
-	end
 end});
 
 
@@ -349,66 +367,6 @@ EGG1:AddToggle({
         end
     end
 });
-
-Teleport:AddDropdown({
-    Name = "Select Return Map",
-    Options ={
-        "Fantasy Valley(World 1)",
-        "Seaside Villa(World 2)",
-        "Congress Hall(World 3)",
-        "Border Territory(World 4)",
-        "Polar Plain(World 5)",
-        "Ghost Forest(World 6)",
-        "Demon Station(World 7)",
-        "Hashira Training(World 8)",
-        "Infinite City(World 9)",
-        "One Punch Man(World 10)"
-    },
-    Callback = function(selectedIndex)
-        getgenv().Settings.selectedTeleportMap = selectedIndex
-    end
-});
-
-Teleport:AddButton({
-    Name = "Teleport To Selected Map",
-    Callback = function()
-        local selectedMap = getgenv().Settings.selectedTeleportMap
-        if selectedMap == "Fantasy Valley(World 1)" then
-            local args = {[1]={mapId=50001}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "Seaside Villa(World 2)" then
-            local args = {[1]={mapId=50002}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "Congress Hall(World 3)" then
-            local args = {[1]={mapId=50003}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "Border Territory(World 4)" then
-            local args = {[1]={mapId=50004}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "Polar Plain(World 5)" then
-            local args = {[1]={mapId=50005}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "Ghost Forest(World 6)" then
-            local args = {[1]={mapId=50006}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "Demon Station(World 7)" then
-            local args = {[1]={mapId=50007}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "Hashira Training(World 8)" then
-            local args = {[1]={mapId=50008}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "Infinite City(World 9)" then
-            local args = {[1]={mapId=50009}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        elseif selectedMap == "One Punch Man(World 10)" then
-            local args = {[1]={mapId=50010}}
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer(unpack(args))
-        else
-            print("Invalid selection")
-        end
-    end
-});
-
 
 Lvl10:AddToggle({Name="Fuse Level 10 Gems",Callback=function(fuseLevel10Gems)
 	if fuseLevel10Gems then
