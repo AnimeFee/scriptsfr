@@ -9,7 +9,6 @@ local SNGTab = Window:MakeTab({Name="Sword And Gems",Icon="rbxassetid://44833459
 local AccesoryTab = Window:MakeTab({Name="Roll-Tab-Legendary",Icon="rbxassetid://4483345998",PremiumOnly=false});
 local MiscTab = Window:MakeTab({Name="Misc",Icon="rbxassetid://4483345998",PremiumOnly=false});
 
-local TradeSec = PlayerTab:AddSection({Name="Trade"});
 local Teleport = PlayerTab:AddSection({Name="Teleport"});
 local EMount = WhtvrTab:AddSection({Name="Mounts"});
 local EGG = WhtvrTab:AddSection({Name="Eggs"});
@@ -50,31 +49,8 @@ EMount:AddButton({Name="Use Selected Mount",Callback=function()
 	end
 end});
 
-
-
-local playerNames = {};
-for _, player in pairs(game.Players:GetPlayers()) do
-	table.insert(playerNames, player.Name);
-end
-TradeSec:AddDropdown({Name="Select Player",Options=playerNames,Callback=function(selectedPlayer)
-	getgenv().getgenv().Settings.selectedPlayer = selectedPlayer;
-end});
-TradeSec:AddButton({Name="Trade Selected Player",Callback=function()
-	if getgenv().getgenv().Settings.selectedPlayer then
-		game:GetService("ReplicatedStorage").Remotes.SendTrade:InvokeServer(game:GetService("Players")[getgenv().getgenv().Settings.selectedPlayer]);
-	else
-		warn("No player selected.");
-	end
-end});
-TradeSec:AddButton({Name="Dupe(Need To Trade)",Callback=function()
-	game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("DeleteMultipleHero"):Destroy();
-end});
-
-FarmSec:AddToggle({Name="Auto Farm",Callback=function(v0)
-	if v0 then
-		getgenv().getgenv().Settings.AutoFarm = true;
-	else
-		getgenv().getgenv().Settings.AutoFarm = false;
+FarmSec:AddToggle({Name="Auto Farm",Callback=function(value)
+		getgenv().getgenv().Settings.AutoFarm = value;
 	end
 end});
 
