@@ -14,15 +14,12 @@ local Window = OrionLib:MakeWindow({
         Icon = "rbxassetid://4483345998", PremiumOnly = false
     })
 
-    -- Adding buttons for each level to the Player tab
     for level = 10, 12 do
         PlayerTab:AddButton({
             Name = "Fuse Gems for Level " .. level,
             Callback = function()
                 local function GetNextGemID(currentLevel)
                     local player = game.Players.LocalPlayer
-
-                    -- Get a reference to the ScrollingFrame inside the player's GUI
                     local gui = player:WaitForChild("PlayerGui")
                     local gemsPanel = gui:WaitForChild("GemsPanel")
                     local frame = gemsPanel:WaitForChild("Frame")
@@ -30,14 +27,9 @@ local Window = OrionLib:MakeWindow({
                     local list = bgImage:WaitForChild("List")
                     local scrollingFrame = list:WaitForChild("ScrollingFrame")
 
-                    -- Check if the ScrollingFrame exists
                     if scrollingFrame then
-                        -- Iterate through each child of the ScrollingFrame
                         for _, child in ipairs(scrollingFrame:GetChildren()) do
-                            -- Find the "numtext" child inside the current child
                             local numtext = child:FindFirstChild("NumText")
-
-                            -- Check if "numtext" exists and if its text matches the current level
                             if numtext then
                                 local level = tonumber(numtext.Text:match("%d+"))
                                 if level == currentLevel then
@@ -48,22 +40,14 @@ local Window = OrionLib:MakeWindow({
                     else
                         error("Error: ScrollingFrame not found.")
                     end
-
-                    -- If no matching gem ID was found, return nil
                     return nil
                 end
-
                 local function FuseGems()
                     local currentLevel = level
-
-                    while currentLevel <= 10 do
+                    while currentLevel <= 14 do
                         local gemID = GetNextGemID(currentLevel)
-
                         if gemID then
-                            print("Level", currentLevel, "gem ID found:", gemID)
                             currentLevel = currentLevel + 1 -- Increment the level for the next iteration
-
-                            -- Construct the args table with gemID repeated five times
                             local args = {
                                 [1] = {
                                     [1] = gemID,
@@ -73,15 +57,7 @@ local Window = OrionLib:MakeWindow({
                                     [5] = gemID
                                 }
                             }
-
-                            print("Invoking FuseGem remote with args:", args)
-
                             game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("FuseGem"):InvokeServer(unpack(args))
-                        else
-                            print("Error: Could not find gem ID for level", currentLevel)
-                        end
-
-                        -- Wait for some time before checking for the next level
                         wait(0.000001)
                     end
                 end
