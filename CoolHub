@@ -30,13 +30,13 @@ local placeId = game.PlaceId
 
 local scriptUrls = {
     [14195873109] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Slayer%20corps",
-    [15744137588] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/BLADESLAYERSCRIPT",
+    [15744137588] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Blade%20Slayer3",
     [17348055576] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Gyat%20Simulator",
     [17489613630] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Slayer%20corps",
     [16436007861] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Warrior%20Simulator(beta)",
     [8880590553] = "https://raw.githubusercontent.com/AnimeFee/scripts/main/Animal%20evolve%20simulator",
     [12331842898] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/%2B1%20Blocks%20Every%20Second",
-    [17556050821] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/BLADESLAYERSCRIPT",
+    [17556050821] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Blade%20Slayer3",
     [16914149804] = "https://raw.githubusercontent.com/AnimeFee/scripts/main/Anime%20Swords%20X",
     [15154513235] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Anime%20Souls%20Simulator%20X",
     [10476933477] = "https://raw.githubusercontent.com/AnimeFee/scriptsfr/main/Strong%20Ninja%20Simulator",
