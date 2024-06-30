@@ -387,6 +387,7 @@ Lvl10:AddToggle({Name="Fuse Level 10 Gems",Callback=function(fuseLevel10Gems)
 		getgenv().getgenv().Settings.fuseLevel10Gems = false;
 	end
 end});
+
 Lvl10:AddToggle({Name="Delete Gems",Callback=function(deleteGems)
 	if deleteGems then
 		getgenv().getgenv().Settings.deleteGems = true;
@@ -406,6 +407,7 @@ Lvl10:AddToggle({Name="Delete Gems",Callback=function(deleteGems)
 		getgenv().getgenv().Settings.deleteGems = false;
 	end
 end});
+
 local function GetFirstFiveGemIDs(level)
 	local player = game.Players.LocalPlayer;
 	local gui = player:WaitForChild("PlayerGui");
@@ -465,6 +467,7 @@ local function FuseFirstFiveGems(level)
 		wait(0.1);
 	end
 end
+
 Lvl10:AddToggle({Name="Auto Fuse All Level Gems",Default=false,Callback=function(Value)
 	getgenv().getgenv().Settings.AutoFuseAllGems = Value;
 	if Value then
