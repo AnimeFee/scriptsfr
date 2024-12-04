@@ -1,0 +1,115 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+
+local Window = OrionLib:MakeWindow({
+Name = "Title of the library", 
+HidePremium = false, 
+SaveConfig = true, 
+ConfigFolder = "OrionTest"
+IntroEnabled = true 
+IntroText = "THIS SCRIPT IS FREE SO DONT BUY IT ANYWHERE"
+})
+
+local Tab = Window:MakeTab({
+	Name = "Tab 1",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Tab = Window:MakeTab({
+	Name = "Tab 2",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Tab = Window:MakeTab({
+	Name = "Tab 3",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Tab = Window:MakeTab({
+	Name = "Tab 4",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Tab = Window:MakeTab({
+	Name = "Tab 5",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+OrionLib:MakeNotification({
+	Name = "IdkyetHub",
+	Content = "Test test alpha kido",
+	Image = "rbxassetid://4483345998",
+	Time = 10
+})
+
+Tab:AddButton({
+	Name = "Button!",
+	Callback = function()
+      		print("button pressed")
+  	end    
+})
+
+Tab:AddButton({
+	Name = "Button!",
+	Callback = function()
+      		print("button pressed")
+  	end    
+})
+
+Tab:AddButton({
+	Name = "Button!",
+	Callback = function()
+      		print("button pressed")
+  	end    
+})
+
+Tab:AddButton({
+	Name = "Button!",
+	Callback = function()
+      		print("button pressed")
+  	end    
+})
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - The function of the button.
+]]
+
+Tab:AddSlider({
+	Name = "Slider",
+	Min = 0,
+	Max = 20,
+	Default = 5,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "bananas",
+	Callback = function(Value)
+		print(Value)
+	end    
+})
+
+Tab:AddTextbox({
+	Name = "Textbox",
+	Default = "default box input",
+	TextDisappear = true,
+	Callback = function(Value)
+		print(Value)
+	end	  
+})
+
+Tab:AddDropdown({
+	Name = "Dropdown",
+	Default = "1",
+	Options = {"1", "2"},
+	Callback = function(Value)
+		print(Value)
+	end    
+})
+
+Dropdown:Refresh(List<table>,true)
+Dropdown:Set("dropdown option")
+OrionLib:Init()
